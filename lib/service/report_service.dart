@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:safe_hi/core/constants.dart';
 import 'package:safe_hi/model/report_model.dart';
 import 'package:safe_hi/model/user_model.dart';
 import 'package:path/path.dart' as path;
@@ -12,7 +13,7 @@ import 'package:safe_hi/util/http_helper.dart';
 /// 리포트 관련 API 통신을 담당하는 서비스 클래스
 class ReportService {
   // API 서버 기본 URL
-  static const String baseUrl = 'https://www.safe-hi.xyz';
+  static const String baseUrl = ApiConfig.baseUrl;
 
   /// 기본 리포트 대상자 목록 조회
   Future<List<ReportTarget>> fetchReportTargets() async {

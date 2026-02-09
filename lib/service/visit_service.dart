@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:safe_hi/core/constants.dart';
 import 'package:safe_hi/model/visit_detail_model.dart';
 import 'package:safe_hi/model/visit_model.dart';
 import 'package:safe_hi/util/http_helper.dart';
@@ -11,7 +12,7 @@ import 'package:mime/mime.dart';
 
 /// 방문 일정 및 대상자 정보 관련 API 통신을 담당하는 서비스 클래스
 class VisitService {
-  static const String baseUrl = 'https://www.safe-hi.xyz';
+  static const String baseUrl = ApiConfig.baseUrl;
 
   /// 오늘 방문 예정 대상자 목록 조회
   static Future<List<Visit>> fetchTodayVisits() async {

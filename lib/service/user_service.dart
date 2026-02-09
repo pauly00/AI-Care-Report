@@ -7,7 +7,7 @@ import 'package:safe_hi/util/login_storage_helper.dart';
 
 /// 사용자 인증 및 정보 관련 API 통신을 담당하는 서비스 클래스
 class UserService {
-  // static const String baseUrl = 'https://www.safe-hi.xyz';
+  // static const String baseUrl = ApiConfig.baseUrl;
   static const String baseUrl = 'http://localhost:8080';
 
   /// 로그인 요청

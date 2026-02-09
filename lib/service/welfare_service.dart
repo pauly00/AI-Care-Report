@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:safe_hi/core/constants.dart';
 import 'package:safe_hi/util/http_helper.dart';
 
-const String baseUrl = 'https://www.safe-hi.xyz';
+const String baseUrl = ApiConfig.baseUrl;
 
 /// 복지 정책 관련 API 통신을 담당하는 서비스 클래스
 class WelfareService {

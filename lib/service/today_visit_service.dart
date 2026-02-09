@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:safe_hi/core/constants.dart';
 import '../model/today_visit.dart';
 
 class TodayVisitService {
-  static const String BASE_URL = 'https://www.safe-hi.xyz';
+  static const String BASE_URL = ApiConfig.baseUrl;
   
   static Future<List<TodayVisit>> getTodayList({
     required String todayDate,

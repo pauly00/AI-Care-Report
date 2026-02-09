@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:safe_hi/core/constants.dart';
 import 'package:safe_hi/model/user_register_model.dart';
 
 /// 회원가입 관련 API 통신을 담당하는 서비스 클래스
 class SignupService {
-  static const String baseUrl = 'https://www.safe-hi.xyz';
+  static const String baseUrl = ApiConfig.baseUrl;
 
   /// 사용자 회원가입 요청
   static Future<Map<String, dynamic>> register(UserRegisterModel user) async {
