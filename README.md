@@ -16,6 +16,36 @@ AI 기반 상담 데이터 요약 및 리포트 자동화 시스템입니다.
 
 ---
 
+
+## 실행 방법
+
+### 백엔드 (BE)
+
+```bash
+# IntelliJ Run/Debug Configurations → Environment variables 설정 후
+./gradlew bootRun
+# 또는 IntelliJ에서 AiCareReportBeApplication 실행
+```
+
+| 변수명 | 설명 |
+|--------|------|
+| `DB_PASSWORD` | Supabase 데이터베이스 비밀번호 |
+| `JWT_SECRET` | JWT 서명 키 (32자 이상 권장, 생략 시 기본값 사용) |
+
+서버는 `http://localhost:8080` 에서 동작합니다.
+
+### 프론트엔드 (FE)
+
+```bash
+# 의존성 패키지 설치
+flutter pub get
+
+# 프로젝트 실행
+flutter run
+```
+
+---
+
 ## 레포지토리 구조
 
 ```
@@ -98,34 +128,6 @@ JWT 기반 로그인 및 회원가입 플로우를 제공합니다.
 
 ---
 
-## 실행 방법
-
-### 백엔드 (BE)
-
-```bash
-# IntelliJ Run/Debug Configurations → Environment variables 설정 후
-./gradlew bootRun
-# 또는 IntelliJ에서 AiCareReportBeApplication 실행
-```
-
-| 변수명 | 설명 |
-|--------|------|
-| `DB_PASSWORD` | Supabase 데이터베이스 비밀번호 |
-| `JWT_SECRET` | JWT 서명 키 (32자 이상 권장, 생략 시 기본값 사용) |
-
-서버는 `http://localhost:8080` 에서 동작합니다.
-
-### 프론트엔드 (FE)
-
-```bash
-# 의존성 패키지 설치
-flutter pub get
-
-# 프로젝트 실행
-flutter run
-```
-
----
 
 ## 기술 스택
 
