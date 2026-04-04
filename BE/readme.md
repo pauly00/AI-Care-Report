@@ -1,21 +1,7 @@
 # AI-Care-Report-BE
 
-AI 기반 상담 데이터 요약 및 리포트 자동화 시스템의 **백엔드 리포지토리**입니다.
-
-## 기술 스택
-
-| 항목 | 내용 |
-|------|------|
-| **Language** | Java 17 |
-| **Framework** | Spring Boot 4.0.2 |
-| **Build Tool** | Gradle (Groovy) |
-| **Database** | PostgreSQL (Supabase) |
-| **ORM** | Spring Data JPA (Hibernate) |
-| **인증** | JWT (JJWT 0.12.6) + Spring Security |
-| **Frontend** | Flutter (AI-Care-Report-FE) — `http://localhost:8080` 연결 |
-
----
-
+AI 기반 상담 데이터 요약 및 리포트 자동화 시스템의 백엔드 리포지토리입니다.
+기존 프론트엔드 프로젝트를 확장하고 개발 역량 강화를 위해 백엔드 아키텍처를 설계 및 구현하였습니다.
 ## 실행 방법
 
 ### 1. 환경 변수 설정
@@ -126,13 +112,19 @@ src/main/java/com/pauly/AI_Care_Report_BE/
 
 ---
 
-## FE 연동 시 주의사항
-
-- Flutter FE의 `lib/core/constants.dart` → `baseUrl = "http://localhost:8080"` 설정 확인
-- **STT 기능**: 현재는 파일만 저장되며 실제 음성 인식은 별도 STT 서비스 연동 필요
-- **업로드 경로**: 서버 루트의 `uploads/` 폴더에 저장됨 (환경변수 `UPLOAD_DIR`로 변경 가능)
-- **비밀번호**: BCrypt 해시 저장. 기존 평문 비밀번호 계정은 재가입 필요
-
 ## 네트워크 설정
 
 공용 네트워크에서 5432 포트 차단 시 Supabase **6543 포트 (Transaction Pooler)** 사용
+
+---
+
+## 기술 스택
+
+| 항목 | 내용 |
+|------|------|
+| **Language** | Java 17 |
+| **Framework** | Spring Boot 4.0.2 |
+| **Build Tool** | Gradle (Groovy) |
+| **Database** | PostgreSQL (Supabase) |
+| **ORM** | Spring Data JPA (Hibernate) |
+| **인증** | JWT (JJWT 0.12.6) + Spring Security |

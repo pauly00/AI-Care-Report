@@ -8,7 +8,6 @@ group = 'com.pauly'
 version = '0.0.1-SNAPSHOT'
 description = 'Backend for AI Care Report Service'
 
-buildDir = 'C:/gradle-builds/ai-care-report'
 
 java {
 	toolchain {

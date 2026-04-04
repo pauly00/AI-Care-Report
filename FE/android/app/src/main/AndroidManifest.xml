@@ -62,5 +62,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- 에뮬레이터 GPU 호환성: Impeller 렌더러 비활성화 -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableImpeller"
+            android:value="false" />
     </application>
 </manifest>
