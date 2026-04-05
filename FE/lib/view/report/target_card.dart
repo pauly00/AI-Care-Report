@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safe_hi/util/responsive.dart';
 import 'package:safe_hi/view/report/monthly_target_page.dart';
-import 'package:safe_hi/view/report/report_1.dart';
 import 'package:safe_hi/view/report/widget/target_card_data.dart';
 
 import '../../widget/card/monthly_target.dart';
@@ -35,75 +34,91 @@ class TargetCard extends StatelessWidget {
           boxShadow: const [BoxShadow(color: Color(0x11000000), blurRadius: 10, offset: Offset(0, 6))],
           border: Border.all(color: const Color(0x1AFB5457)),
         ),
-        child: Stack(
-          children: [
-            // 상태 뱃지 (좌측 상단)
-            Positioned(
-              left: 12,
-              top: 12,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF7B80),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  data.status, // 더미값 - API 연동 필요
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final compact = constraints.maxHeight < 190;
+            final avatarSize = compact ? 64.0 : 92.0;
+            final emojiSize = compact ? 30.0 : 42.0;
+            final badgeVPad = compact ? 4.0 : 6.0;
+            final contentPad = compact ? 12.0 : 16.0;
+            final nameFont = compact ? r.fontBase : r.fontM;
+            final addressMaxLines = compact ? 1 : 2;
+
+            return Stack(
+              children: [
+                // 상태 뱃지 (좌측 상단)
+                Positioned(
+                  left: 12,
+                  top: 12,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: badgeVPad),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF7B80),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      data.status,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: compact ? 11 : 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
 
-            // 카드 메인 콘텐츠
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 프로필 이미지 (이모지)
-                    Container(
-                      width: 92,
-                      height: 92,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: const Color(0xFFFF7B80), width: 4),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(data.emoji, style: const TextStyle(fontSize: 42)), // 더미값 - API 연동 필요
-                    ),
-                    const SizedBox(height: 10),
+                // 카드 메인 콘텐츠
+                Padding(
+                  padding: EdgeInsets.all(contentPad),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // 프로필 이미지 (이모지)
+                        Container(
+                          width: avatarSize,
+                          height: avatarSize,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: const Color(0xFFFF7B80), width: compact ? 3 : 4),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(data.emoji, style: TextStyle(fontSize: emojiSize)),
+                        ),
+                        SizedBox(height: compact ? 6 : 10),
 
-                    // 대상자 이름
-                    Text(
-                      data.name, // 더미값 - API 연동 필요
-                      style: TextStyle(
-                        fontSize: r.fontM,
-                        fontWeight: FontWeight.w800,
-                        color: const Color(0xFFFB5457),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
+                        // 대상자 이름
+                        Text(
+                          data.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: nameFont,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFFFB5457),
+                          ),
+                        ),
+                        SizedBox(height: compact ? 4 : 6),
 
-                    // 주소 정보
-                    Text(
-                      data.address, // 더미값 - API 연동 필요
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: r.fontSmall,
-                        color: const Color(0xFF8B8B8B),
-                        height: 1.35,
-                      ),
+                        // 주소 정보
+                        Text(
+                          data.address,
+                          textAlign: TextAlign.center,
+                          maxLines: addressMaxLines,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: r.fontSmall,
+                            color: const Color(0xFF8B8B8B),
+                            height: 1.25,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );

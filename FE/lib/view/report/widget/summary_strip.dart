@@ -26,71 +26,97 @@ class SummaryStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(r.itemSpacing),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFB5457),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Color(0x1A000000), blurRadius: 10, offset: Offset(0, 4))],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 12,
-            child: Container(
-              padding: EdgeInsets.all(r.itemSpacing * 0.9),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFF7B80),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _summaryLine('대상자', '$totalTarget명', r),
-                  const SizedBox(height: 8),
-                  Container(height: 1, color: Colors.white.withOpacity(0.5)),
-                  const SizedBox(height: 8),
-                  _summaryLine('리포트', '$totalReport건', r),
-                ],
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 760;
+
+        return Container(
+          padding: EdgeInsets.all(r.itemSpacing),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFB5457),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: const [BoxShadow(color: Color(0x1A000000), blurRadius: 10, offset: Offset(0, 4))],
           ),
-          SizedBox(width: r.itemSpacing),
-          for (int i = 0; i < items.length; i++)
-            Expanded(
-              flex: 10,
-              child: Container(
-                margin: EdgeInsets.only(left: i == 0 ? 0 : r.itemSpacing / 2),
-                padding: EdgeInsets.symmetric(vertical: r.itemSpacing * 0.9),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+          child: isNarrow
+              ? Column(
                   children: [
-                    Icon(items[i].icon, color: const Color(0xFFFB5457)),
-                    const SizedBox(height: 6),
-                    Text(
-                      items[i].label,
-                      style: TextStyle(
-                        fontSize: r.fontSmall,
-                        color: const Color(0xFFFB5457),
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      '${items[i].count}건',
-                      style: TextStyle(
-                        fontSize: r.fontSmall,
-                        color: const Color(0xFFB24A4C),
-                      ),
+                    _totalSummaryCard(),
+                    SizedBox(height: r.itemSpacing),
+                    Wrap(
+                      spacing: r.itemSpacing / 2,
+                      runSpacing: r.itemSpacing / 2,
+                      children: [
+                        for (int i = 0; i < items.length; i++) _itemCard(i, fixedWidth: (constraints.maxWidth - r.itemSpacing * 2.5) / 2),
+                      ],
                     ),
                   ],
+                )
+              : Row(
+                  children: [
+                    Expanded(flex: 12, child: _totalSummaryCard()),
+                    SizedBox(width: r.itemSpacing),
+                    for (int i = 0; i < items.length; i++)
+                      Expanded(
+                        flex: 10,
+                        child: _itemCard(i, margin: EdgeInsets.only(left: i == 0 ? 0 : r.itemSpacing / 2)),
+                      ),
+                  ],
                 ),
-              ),
+        );
+      },
+    );
+  }
+
+  Widget _totalSummaryCard() {
+    return Container(
+      padding: EdgeInsets.all(r.itemSpacing * 0.9),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFF7B80),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _summaryLine('대상자', '$totalTarget명', r),
+          const SizedBox(height: 8),
+          Container(height: 1, color: Colors.white.withOpacity(0.5)),
+          const SizedBox(height: 8),
+          _summaryLine('리포트', '$totalReport건', r),
+        ],
+      ),
+    );
+  }
+
+  Widget _itemCard(int index, {EdgeInsetsGeometry? margin, double? fixedWidth}) {
+    return Container(
+      width: fixedWidth,
+      margin: margin,
+      padding: EdgeInsets.symmetric(vertical: r.itemSpacing * 0.9),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFFFF),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(items[index].icon, color: const Color(0xFFFB5457)),
+          const SizedBox(height: 6),
+          Text(
+            items[index].label,
+            style: TextStyle(
+              fontSize: r.fontSmall,
+              color: const Color(0xFFFB5457),
+              fontWeight: FontWeight.w700,
             ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            '${items[index].count}건',
+            style: TextStyle(
+              fontSize: r.fontSmall,
+              color: const Color(0xFFB24A4C),
+            ),
+          ),
         ],
       ),
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_hi/view_model/user_view_model.dart';
+import 'package:safe_hi/view_model/report_view_model.dart';
 import 'package:safe_hi/view/login/login_page.dart';
-import 'package:safe_hi/widget/appbar/default_appbar.dart';
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
@@ -11,7 +11,19 @@ class MyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // 사용자 정보 가져오기
     final userVM = Provider.of<UserViewModel>(context);
+    final reportVM = Provider.of<ReportViewModel>(context);
     final username = userVM.user?.name ?? 'OOO';
+    final reports = reportVM.targets;
+
+    final totalVisitCount = reports.length;
+    final managedHouseholdCount = reports.map((e) => e.targetId).toSet().length;
+    final now = DateTime.now();
+    final monthlyVisitCount = reports.where((report) {
+      if (report.visitTime.isEmpty) return false;
+      final parsed = DateTime.tryParse(report.visitTime.replaceFirst(' ', 'T'));
+      if (parsed == null) return false;
+      return parsed.year == now.year && parsed.month == now.month;
+    }).length;
 
     return SafeArea(
       child: Scaffold(
@@ -137,25 +149,25 @@ class MyPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             // 연간 방문 수
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   '방문',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text('1년 기준', style: TextStyle(fontSize: 9)),
-                                SizedBox(height: 5),
+                                const Text('1년 기준', style: TextStyle(fontSize: 9)),
+                                const SizedBox(height: 5),
                                 Text(
-                                  '289',
-                                  style: TextStyle(
+                                  '$totalVisitCount',
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFFFB5457),
@@ -164,7 +176,7 @@ class MyPage extends StatelessWidget {
                               ],
                             ),
 
-                            VerticalDivider(
+                            const VerticalDivider(
                               color: Colors.grey,
                               thickness: 1,
                               width: 30,
@@ -174,18 +186,18 @@ class MyPage extends StatelessWidget {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   '방문',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text('한 달 기준', style: TextStyle(fontSize: 9)),
-                                SizedBox(height: 5),
+                                const Text('한 달 기준', style: TextStyle(fontSize: 9)),
+                                const SizedBox(height: 5),
                                 Text(
-                                  '32',
-                                  style: TextStyle(
+                                  '$monthlyVisitCount',
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFFFB5457),
@@ -194,7 +206,7 @@ class MyPage extends StatelessWidget {
                               ],
                             ),
 
-                            VerticalDivider(
+                            const VerticalDivider(
                               color: Colors.grey,
                               thickness: 1,
                               width: 30,
@@ -204,18 +216,18 @@ class MyPage extends StatelessWidget {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   '담당 가구',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text('', style: TextStyle(fontSize: 9)),
-                                SizedBox(height: 5),
+                                const Text('', style: TextStyle(fontSize: 9)),
+                                const SizedBox(height: 5),
                                 Text(
-                                  '11',
-                                  style: TextStyle(
+                                  '$managedHouseholdCount',
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFFFB5457),

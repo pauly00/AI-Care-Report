@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:safe_hi/core/constants.dart';
+import 'package:safe_hi/model/report_model.dart';
+import 'package:safe_hi/model/target_model.dart';
 import 'package:safe_hi/model/visit_detail_model.dart';
 import 'package:safe_hi/model/visit_model.dart';
 import 'package:safe_hi/util/http_helper.dart';
@@ -128,6 +130,142 @@ class VisitService {
 
     if (response.statusCode != 200) {
       throw Exception('녹음 파일 업로드 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 방문 보고서 생성
+  static Future<Map<String, dynamic>> addVisitReport({
+    required String visitTime,
+    required String email,
+    required String targetName,
+    required int targetId,
+  }) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.post(
+      Uri.parse('$baseUrl/db/addVisitReport'),
+      headers: headers,
+      body: jsonEncode({
+        'visittime': visitTime,
+        'email': email,
+        'targetname': targetName,
+        'targetid': targetId,
+      }),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('방문 보고서 생성 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 모든 방문 보고서 조회 (JWT 필요)
+  static Future<List<ReportTarget>> getAllVisitReports() async {
+    final headers = await buildAuthHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/db/getAllVisitReports'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((e) => ReportTarget.fromJson(e)).toList();
+    } else {
+      throw Exception('방문 보고서 조회 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 방문 완료 보고서 조회 (JWT 필요)
+  static Future<List<ReportTarget>> getResultReportList() async {
+    final headers = await buildAuthHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/db/getResultReportList'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((e) => ReportTarget.fromJson(e)).toList();
+    } else {
+      throw Exception('완료 보고서 조회 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 상담 완료 처리 (reportstatus = 2)
+  static Future<void> visitReportDone(int reportId) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/db/visitReportDone?reportId=$reportId'),
+      headers: headers,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('상담 완료 처리 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 보고서에 사용자(email) 설정
+  static Future<void> setUserToReport({
+    required int reportId,
+    required String email,
+  }) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.post(
+      Uri.parse('$baseUrl/db/setUserToReport'),
+      headers: headers,
+      body: jsonEncode({'reportid': reportId, 'email': email}),
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('사용자 설정 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 카테고리 요약본 DB에 업데이트
+  static Future<void> updateVisitCategory({
+    required int reportId,
+    required String email,
+    required String txtFile,
+  }) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.post(
+      Uri.parse('$baseUrl/db/update_visit_category'),
+      headers: headers,
+      body: jsonEncode({
+        'reportid': reportId,
+        'email': email,
+        'txt_file': txtFile,
+      }),
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('카테고리 업데이트 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 대상자 등록
+  static Future<Map<String, dynamic>> addTarget(
+    Map<String, dynamic> targetData,
+  ) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.post(
+      Uri.parse('$baseUrl/db/addTarget'),
+      headers: headers,
+      body: jsonEncode(targetData),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('대상자 등록 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 모든 대상자 조회
+  static Future<List<Target>> getAllTargets() async {
+    final headers = await buildAuthHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/db/getAllTargets'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((e) => Target.fromJson(e)).toList();
+    } else {
+      throw Exception('대상자 목록 조회 실패: ${response.statusCode}');
     }
   }
 }

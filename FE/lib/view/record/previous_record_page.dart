@@ -120,7 +120,12 @@ class PreviousRecordsPage extends StatelessWidget {
                               // todo: 위치 리포트1에서 다른 페이지로 수정 예정
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => Report1()),
+                                MaterialPageRoute(
+                                  builder: (context) => Report1(
+                                    targetName: visit['name']! as String,
+                                    address: visit['address']! as String,
+                                  ),
+                                ),
                               );
                             },
                             child: VisitRecordCard(

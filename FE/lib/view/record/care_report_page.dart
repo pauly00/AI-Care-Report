@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:safe_hi/util/responsive.dart';
 import 'package:safe_hi/view/report/care_report_detail.dart';
 import 'package:safe_hi/widget/appbar/default_appbar.dart';
-import 'package:safe_hi/view/report/report_1.dart';
 
 class CareReportPage extends StatefulWidget {
   const CareReportPage({super.key});

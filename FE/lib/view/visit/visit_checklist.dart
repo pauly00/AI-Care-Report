@@ -3,14 +3,14 @@ import 'package:safe_hi/view/visit/visit_report.dart';
 import 'package:safe_hi/widget/appbar/default_back_appbar.dart';
 
 /// 현장 체크리스트 화면 - 방문 상태 체크 및 담당자 메모 작성
-class CheckListNew extends StatefulWidget {
-  const CheckListNew({super.key});
+class CheckList extends StatefulWidget {
+  const CheckList({super.key});
 
   @override
-  State<CheckListNew> createState() => _CheckListNewState();
+  State<CheckList> createState() => _CheckListState();
 }
 
-class _CheckListNewState extends State<CheckListNew> {
+class _CheckListState extends State<CheckList> {
   // 각 카드의 선택 인덱스 상태 (-1은 아무 것도 선택 안 함)
   final Map<String, int> _selectedIndex = {
     '건강상태-1': 0,

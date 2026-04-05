@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safe_hi/util/responsive.dart';
-import 'package:safe_hi/view/visit/visit_checklist_new.dart';
+import 'package:safe_hi/view/visit/visit_checklist.dart';
 import 'package:safe_hi/widget/appbar/default_back_appbar.dart'; // ✅ import 추가
 
 
@@ -417,7 +417,7 @@ class _VisitStartRecordPageState extends State<VisitStartRecordPage>
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CheckListNew(),
+                    builder: (context) => const CheckList(),
                   ),
                 );
               },

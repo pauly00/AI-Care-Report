@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:safe_hi/core/constants.dart';
+import 'package:safe_hi/model/policy_model.dart';
+import 'package:safe_hi/model/welfare_policy_model.dart';
 import 'package:safe_hi/util/http_helper.dart';
 
 const String baseUrl = ApiConfig.baseUrl;
@@ -78,6 +80,137 @@ class WelfareService {
       }
     } else {
       throw Exception('HTTP 오류: ${response.statusCode}');
+    }
+  }
+
+  /// 모든 복지정책 조회
+  Future<List<WelfarePolicy>> getAllWelfarePolicies() async {
+    final headers = await buildAuthHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/db/welfare-policies'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return WelfarePolicy.listFromJson(data);
+    } else {
+      throw Exception('복지정책 목록 조회 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 특정 복지정책 조회
+  Future<WelfarePolicy> getWelfarePolicy(int policyId) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/db/welfare-policies/$policyId'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      return WelfarePolicy.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('복지정책 조회 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 유저의 복지정책 업데이트
+  Future<void> updateUserWelfarePolicies(
+    int userId,
+    List<dynamic> policy,
+  ) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.put(
+      Uri.parse('$baseUrl/db/welfare-policies/$userId'),
+      headers: headers,
+      body: jsonEncode({'policy': policy}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('복지정책 업데이트 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 유저의 처리완료된 복지 데이터 조회
+  Future<Map<String, dynamic>> getWelfareDatas(int userId) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/db/welfare-datas/$userId'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('복지 데이터 조회 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 복지 데이터 업데이트
+  Future<void> updateWelfareDatas(int userId, List<dynamic> policy) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.put(
+      Uri.parse('$baseUrl/db/welfare-datas/$userId'),
+      headers: headers,
+      body: jsonEncode({'policy': policy}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('복지 데이터 업데이트 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 정책 정보 조회
+  Future<PolicyModel> getPolicy(int policyId) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/db/policies/$policyId'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      return PolicyModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('정책 조회 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 정책 생성
+  Future<PolicyModel> createPolicy(Map<String, dynamic> data) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.post(
+      Uri.parse('$baseUrl/db/policies'),
+      headers: headers,
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return PolicyModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('정책 생성 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 정책 업데이트
+  Future<PolicyModel> updatePolicy(
+    int policyId,
+    Map<String, dynamic> data,
+  ) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.put(
+      Uri.parse('$baseUrl/db/policies/$policyId'),
+      headers: headers,
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      return PolicyModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('정책 업데이트 실패: ${response.statusCode}');
+    }
+  }
+
+  /// 정책 삭제
+  Future<void> deletePolicy(int policyId) async {
+    final headers = await buildAuthHeaders();
+    final response = await http.delete(
+      Uri.parse('$baseUrl/db/policies/$policyId'),
+      headers: headers,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('정책 삭제 실패: ${response.statusCode}');
     }
   }
 }

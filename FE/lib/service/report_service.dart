@@ -174,4 +174,47 @@ class ReportService {
       throw Exception('리포트 다운로드 실패: ${response.statusCode}');
     }
   }
+
+  /// STT 경로 업데이트
+  Future<void> updateSttPath({
+    required int reportId,
+    required String email,
+    required String newPath,
+  }) async {
+    final url = Uri.parse('$baseUrl/db/update_stt_path');
+    final headers = await buildAuthHeaders();
+
+    final response = await http.patch(
+      url,
+      headers: headers,
+      body: jsonEncode({
+        'reportid': reportId,
+        'email': email,
+        'newPath': newPath,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('STT 경로 업데이트 실패: ${response.statusCode}');
+    }
+  }
+
+  /// STT 경로 조회
+  Future<String> getTranscriptPath({
+    required int reportId,
+    required String email,
+  }) async {
+    final url = Uri.parse(
+      '$baseUrl/db/get_transcript_path?reportid=$reportId&email=${Uri.encodeComponent(email)}',
+    );
+    final headers = await buildAuthHeaders();
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception('STT 경로 조회 실패: ${response.statusCode}');
+    }
+  }
 }

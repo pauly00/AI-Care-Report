@@ -82,4 +82,53 @@ class UserService {
 
     throw Exception('예상하지 못한 응답 형식');
   }
+
+  /// 이메일 중복 체크
+  Future<Map<String, dynamic>> emailCheck(String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/db/email_check'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      );
+      return jsonDecode(utf8.decode(response.bodyBytes));
+    } catch (e) {
+      debugPrint('[UserService] emailCheck error: $e');
+      return {'status': false, 'msg': '서버에 연결할 수 없습니다.'};
+    }
+  }
+
+  /// 유저 정보 업데이트
+  Future<Map<String, dynamic>> updateUser(
+    int userId,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      final headers = await buildAuthHeaders();
+      final response = await http.put(
+        Uri.parse('$baseUrl/db/users/$userId'),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+      return jsonDecode(utf8.decode(response.bodyBytes));
+    } catch (e) {
+      debugPrint('[UserService] updateUser error: $e');
+      return {'status': false, 'msg': '서버에 연결할 수 없습니다.'};
+    }
+  }
+
+  /// 유저 삭제
+  Future<Map<String, dynamic>> deleteUser(int userId) async {
+    try {
+      final headers = await buildAuthHeaders();
+      final response = await http.delete(
+        Uri.parse('$baseUrl/db/users/$userId'),
+        headers: headers,
+      );
+      return jsonDecode(utf8.decode(response.bodyBytes));
+    } catch (e) {
+      debugPrint('[UserService] deleteUser error: $e');
+      return {'status': false, 'msg': '서버에 연결할 수 없습니다.'};
+    }
+  }
 }

@@ -15,11 +15,10 @@ class TodayVisitService {
         Uri.parse('$BASE_URL/db/getTodayList'),
         headers: {
           'Content-Type': 'application/json',
-          'header': token,
+          'Authorization': 'Bearer $token',
         },
         body: json.encode({
           'todayDate': todayDate,
-          'header': token,
         }),
       );
 

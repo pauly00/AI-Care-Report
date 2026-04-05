@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:safe_hi/view/visit/visit_confirm_check.dart';
 import 'package:safe_hi/view_model/visit/visit_list_view_model.dart';
 import 'package:safe_hi/widget/appbar/default_appbar.dart';
-import 'package:safe_hi/widget/card/visit_list_card.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -221,183 +220,164 @@ class _VisitListPageState extends State<VisitListPage> {
 
                         /// 방문자 리스트 영역
                         Expanded(
-                          child: ListView(
-                            padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                            children: [
-                              /// 더미 데이터로 방문자 리스트 생성 - 추후 API 연동 필요
-                              ...List.generate(3, (index) {
-                                // 더미 데이터 - 추후 백엔드 연동 필요
-                                final names = ['오하이', '홍길동', '김영희'];
-                                final times = ['오전 10:00', '오전 11:00', '오후 1:00'];
-                                final phones = ['010-9999-8765', '010-1234-5678', '010-8888-5678'];
-                                final addresses = [
-                                  '서울특별시 중구 필동로 1길 30 동국대학교 본관 4층 4142호',
-                                  '대전서구 대덕대로 150 경성큰마을아파트 102동 103호',
-                                  '서울특별시 강북구 노해로 27길 14-14 202호'
-                                ];
-                                final types = ['전화돌봄', '현장돌봄', '전화돌봄']; // 더미 데이터
-                                final isPhoneCare = types[index] == '전화돌봄';
+                          child: Consumer<VisitViewModel>(
+                            builder: (context, visitVM, _) {
+                              if (visitVM.isLoading) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
 
-                                return GestureDetector(
-                                  onTap: () async {
-                                    if (isPhoneCare) {
-                                      // 전화돌봄일 때 전화 걸기
-                                      final phoneUrl = Uri.parse('tel:${phones[index]}');
-                                      if (await canLaunchUrl(phoneUrl)) {
-                                        await launchUrl(phoneUrl);
-                                      } else {
-                                        if (mounted) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(content: Text('전화를 걸 수 없습니다.')),
-                                          );
-                                        }
-                                      }
-                                    } else {
-                                      // 현장돌봄일 때 방문 확인 페이지로 이동
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => VisitCheckConfirmPage(
-                                            name: names[index],
-                                            address: addresses[index],
-                                            phone: phones[index],
+                              return ValueListenableBuilder<SelectedButton>(
+                                valueListenable: _selectedButtonNotifier,
+                                builder: (context, selectedButton, _) {
+                                  final filteredVisits = visitVM.visits.where((visit) {
+                                    if (selectedButton == SelectedButton.all) return true;
+                                    if (visit.visitType == null) return selectedButton == SelectedButton.field;
+                                    if (selectedButton == SelectedButton.phone) return visit.visitType == 0;
+                                    return visit.visitType == 1;
+                                  }).toList();
+
+                                  if (filteredVisits.isEmpty) {
+                                    return const Center(
+                                      child: Text('선택한 조건의 방문 일정이 없습니다.'),
+                                    );
+                                  }
+
+                                  return ListView.builder(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                                    itemCount: filteredVisits.length,
+                                    itemBuilder: (context, index) {
+                                      final visit = filteredVisits[index];
+                                      final isPhoneCare = (visit.visitType ?? 1) == 0;
+                                      final address =
+                                          '${visit.address} ${visit.addressDetails}'.trim();
+                                        final rawTime = visit.time;
+                                        final candidateTime = rawTime.contains(' ')
+                                          ? rawTime.split(' ').last
+                                          : rawTime;
+                                        final displayTime = candidateTime.length >= 5
+                                          ? candidateTime.substring(0, 5)
+                                          : candidateTime;
+
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          if (isPhoneCare) {
+                                            final phoneUrl = Uri.parse('tel:${visit.phone}');
+                                            if (await canLaunchUrl(phoneUrl)) {
+                                              await launchUrl(phoneUrl);
+                                            } else {
+                                              if (mounted) {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text('전화를 걸 수 없습니다.')),
+                                                );
+                                              }
+                                            }
+                                          } else {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => VisitCheckConfirmPage(
+                                                  name: visit.name,
+                                                  address: address,
+                                                  phone: visit.phone,
+                                                  address1: visit.address,
+                                                  address2: visit.addressDetails,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.only(bottom: 12.0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(color: Colors.grey.shade300),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                        decoration: BoxDecoration(
+                                                          color: isPhoneCare
+                                                              ? const Color(0xFFFFF3CD)
+                                                              : const Color(0xFFFFEBEE),
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          border: Border.all(
+                                                            color: isPhoneCare
+                                                                ? const Color(0xFFE65100)
+                                                                : const Color(0xFFD32F2F),
+                                                            width: 1.5,
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          isPhoneCare ? '전화돌봄' : '현장돌봄',
+                                                          style: TextStyle(
+                                                            color: isPhoneCare
+                                                                ? const Color(0xFFE65100)
+                                                                : const Color(0xFFD32F2F),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 12),
+                                                      Row(
+                                                        children: [
+                                                          Flexible(
+                                                            child: Text(
+                                                              visit.name,
+                                                              overflow: TextOverflow.ellipsis,
+                                                              style: const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.bold,
+                                                                color: Colors.black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+                                                          Text(
+                                                            displayTime,
+                                                            style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: Colors.grey.shade500,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Text(
+                                                        isPhoneCare ? visit.phone : address,
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  isPhoneCare ? Icons.phone : Icons.arrow_forward_ios,
+                                                  color: const Color(0xFFFB5457),
+                                                  size: 20,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );
-                                    }
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(bottom: 12.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: Colors.grey.shade300),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              /// 방문자 정보 영역
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    /// 방문 유형 라벨 (전화돌봄/현장돌봄)
-                                                    Container(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                                      decoration: BoxDecoration(
-                                                        color: isPhoneCare 
-                                                            ? const Color(0xFFFFF3CD) // 전화돌봄 - 개나리색 배경
-                                                            : const Color(0xFFFFEBEE), // 현장돌봄 - 빨간색 배경
-                                                        borderRadius: BorderRadius.circular(10),
-                                                        border: Border.all(
-                                                          color: isPhoneCare
-                                                              ? const Color(0xFFE65100) // 전화돌봄 - 진한 주황색 테두리
-                                                              : const Color(0xFFD32F2F), // 현장돌봄 - 빨간색 테두리
-                                                          width: 1.5,
-                                                        ),
-                                                      ),
-                                                      child: Text(
-                                                        types[index],
-                                                        style: TextStyle(
-                                                          color: isPhoneCare
-                                                              ? const Color(0xFFE65100) // 전화돌봄 - 진한 주황색 텍스트
-                                                              : const Color(0xFFD32F2F), // 현장돌봄 - 빨간색 텍스트
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 12),
-                                                    /// 이름과 시간을 같은 줄에 배치
-                                                    Row(
-                                                      children: [
-                                                        /// 방문자 이름 (bold체)
-                                                        Text(
-                                                          names[index],
-                                                          style: const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight: FontWeight.bold,
-                                                            color: Colors.black,
-                                                          ),
-                                                        ),
-                                                        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
-                                                        /// 방문 시간 (회색)
-                                                        Text(
-                                                          times[index],
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: Colors.grey.shade500,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    /// 주소 또는 전화번호 정보
-                                                    Text(
-                                                      isPhoneCare 
-                                                          ? phones[index]    // 전화돌봄일 때 전화번호 표시
-                                                          : addresses[index], // 현장돌봄일 때 주소 표시
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-
-                                              /// 전화돌봄일 때 전화 아이콘, 현장돌봄일 때 화살표 아이콘
-                                              Icon(
-                                                isPhoneCare ? Icons.phone : Icons.arrow_forward_ios,
-                                                color: const Color(0xFFFB5457),
-                                                size: 20,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-
-                              /// 새 방문 추가 버튼
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 12.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.grey.shade300),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(32.0),
-                                  child: Center(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        // TODO: 새로운 방문 추가
-                                        print('새로운 방문 추가 버튼 클릭');
-                                      },
-                                      child: Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFFB5457),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const Icon(
-                                          Icons.add,
-                                          color: Colors.white,
-                                          size: 30,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                                    },
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ),
                       ],

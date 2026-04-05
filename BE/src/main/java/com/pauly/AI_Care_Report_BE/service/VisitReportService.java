@@ -64,21 +64,56 @@ public class VisitReportService {
 
         return reports.stream().map(report -> {
             Map<String, Object> item = new HashMap<>();
+            Integer visitTypeCode = toVisitTypeCode(report.getVisittype());
+
             item.put("reportid", report.getId());
             item.put("visitTime", report.getVisittime());
-            item.put("visitType", report.getVisittype() != null ? report.getVisittype() : 0);
+            item.put("visittime", report.getVisittime());
+            item.put("reportstatus", report.getReportstatus() != null ? report.getReportstatus() : 0);
+            item.put("visitType", visitTypeCode);
+            item.put("visittype", visitTypeCode);
 
             if (report.getTarget() != null) {
                 item.put("name", report.getTarget().getTargetname());
                 item.put("address", report.getTarget().getAddress1());
                 item.put("callNum", report.getTarget().getTargetcallnum());
+
+                Map<String, Object> targetInfo = new HashMap<>();
+                targetInfo.put("targetid", report.getTarget().getId());
+                targetInfo.put("targetname", report.getTarget().getTargetname() != null ? report.getTarget().getTargetname() : "");
+                targetInfo.put("address1", report.getTarget().getAddress1() != null ? report.getTarget().getAddress1() : "");
+                targetInfo.put("address2", report.getTarget().getAddress2() != null ? report.getTarget().getAddress2() : "");
+                targetInfo.put("targetcallnum", report.getTarget().getTargetcallnum() != null ? report.getTarget().getTargetcallnum() : "");
+                targetInfo.put("gender", report.getTarget().getGender() != null ? report.getTarget().getGender() : 0);
+                targetInfo.put("age", report.getTarget().getAge() != null ? report.getTarget().getAge() : 0);
+                item.put("targetInfo", targetInfo);
             } else {
                 item.put("name", "");
                 item.put("address", "");
                 item.put("callNum", "");
+                item.put("targetInfo", Map.of());
             }
             return item;
         }).collect(Collectors.toList());
+    }
+
+    private Integer toVisitTypeCode(String visitType) {
+        if (visitType == null || visitType.isBlank()) {
+            return 1;
+        }
+
+        if ("전화돌봄".equals(visitType)) {
+            return 0;
+        }
+        if ("현장돌봄".equals(visitType) || "방문돌봄".equals(visitType)) {
+            return 1;
+        }
+
+        try {
+            return Integer.parseInt(visitType);
+        } catch (NumberFormatException e) {
+            return 1;
+        }
     }
 
     // 기본 보고서 정보 업로드

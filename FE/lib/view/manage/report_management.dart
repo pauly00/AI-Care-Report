@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:safe_hi/util/responsive.dart';
+import 'package:safe_hi/model/report_model.dart';
+import 'package:safe_hi/view_model/report_view_model.dart';
+import 'package:safe_hi/view_model/visit/visit_list_view_model.dart';
 
 import 'package:safe_hi/view/report/widget/summary_strip.dart';
 import 'package:safe_hi/view/report/widget/report_search_bar.dart';
@@ -17,15 +21,7 @@ class ReportManagementPage extends StatefulWidget {
 }
 
 class _ReportManagementPageState extends State<ReportManagementPage> {
-  // 더미 대상자 데이터 - 추후 API 연동 필요
-  final List<TargetCardData> _allTargets = [
-    const TargetCardData(name: '김민수', address: '제주시 연동 1274,\n푸른섬아파트 101동 803호', status: '3건', emoji: '🧓'),
-    const TargetCardData(name: '오하이', address: '제주시 삼도이동 45-7, \n은하주택 1동 201호', status: '2건', emoji: '👵'),
-    const TargetCardData(name: '이유진', address: '제주시 오라삼동 321-8, \n해송주택 2동 101호', status: '3건', emoji: '👩‍🦳'),
-    const TargetCardData(name: '김예빈', address: '제주시 아라동 432-5, \n돌담주택 201호', status: '3건', emoji: '👩‍🦳'),
-    const TargetCardData(name: '홍길동', address: '제주시 노형로 12,\n한별아파트 304동 1201호', status: '3건', emoji: '🧑‍🦳'),
-    const TargetCardData(name: '박철수', address: '제주시 중앙로 55,\n한라오피스텔 902호', status: '1건', emoji: '👨‍🦳'),
-  ];
+  List<TargetCardData> _allTargets = [];
 
   // 필터링된 대상자 리스트
   List<TargetCardData> _filteredTargets = [];
@@ -33,7 +29,10 @@ class _ReportManagementPageState extends State<ReportManagementPage> {
   @override
   void initState() {
     super.initState();
-    _filteredTargets = _allTargets; // 초기에는 전체 목록 표시
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ReportViewModel>().fetchTargets();
+      context.read<VisitViewModel>().fetchTodayVisits();
+    });
   }
 
   /// 검색 결과 업데이트
@@ -43,9 +42,66 @@ class _ReportManagementPageState extends State<ReportManagementPage> {
     });
   }
 
+  String _emojiByGender(int gender) {
+    if (gender == 1) return '👨‍🦳';
+    if (gender == 0) return '👩‍🦳';
+    return '🧓';
+  }
+
+  void _syncTargetCards(ReportViewModel reportVM) {
+    final grouped = <int, List<ReportTarget>>{};
+    for (final target in reportVM.targets) {
+      grouped.putIfAbsent(target.targetId, () => []).add(target);
+    }
+
+    final mapped = grouped.values.map((items) {
+      final first = items.first;
+      final fullAddress = '${first.address1} ${first.address2}'.trim();
+      return TargetCardData(
+        name: first.targetName,
+        address: fullAddress,
+        status: '${items.length}건',
+        emoji: _emojiByGender(first.gender),
+      );
+    }).toList();
+
+    final changed = mapped.length != _allTargets.length ||
+      mapped.asMap().entries.any((entry) {
+        final i = entry.key;
+        if (i >= _allTargets.length) return true;
+        final current = _allTargets[i];
+        final next = entry.value;
+        return current.name != next.name ||
+          current.address != next.address ||
+          current.status != next.status ||
+          current.emoji != next.emoji;
+      });
+    if (changed) {
+      _allTargets = mapped;
+      _filteredTargets = mapped;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final r = Responsive(context);
+    final reportVM = context.watch<ReportViewModel>();
+    final visitVM = context.watch<VisitViewModel>();
+
+    _syncTargetCards(reportVM);
+
+    final allReports = reportVM.targets;
+    final totalTarget = _allTargets.length;
+    final totalReport = allReports.length;
+
+    final hasTypeInReports = allReports.any((item) => item.visitType != null);
+    final phoneCareCount = hasTypeInReports
+        ? allReports.where((item) => item.visitType == 0).length
+        : visitVM.visits.where((item) => item.visitType == 0).length;
+    final fieldCareCount = hasTypeInReports
+        ? allReports.where((item) => item.visitType == 1).length
+        : visitVM.visits.where((item) => item.visitType == 1).length;
+    final emergencyCount = allReports.where((item) => item.reportStatus >= 3).length;
 
     return SafeArea(
       child: Scaffold(
@@ -67,12 +123,12 @@ class _ReportManagementPageState extends State<ReportManagementPage> {
                     // 통계 요약 스트립
                     SummaryStrip(
                       r: r,
-                      totalTarget: 7, // 더미값 - 백엔드 연동 필요
-                      totalReport: 12, // 더미값 - 백엔드 연동 필요
-                      items: const [
-                        SummaryItem(icon: Icons.call,           label: '전화돌봄', count: 5), // 더미값
-                        SummaryItem(icon: Icons.home_rounded,   label: '방문돌봄', count: 6), // 더미값
-                        SummaryItem(icon: Icons.local_taxi_rounded, label: '긴급출동', count: 1), // 더미값
+                      totalTarget: totalTarget,
+                      totalReport: totalReport,
+                      items: [
+                        SummaryItem(icon: Icons.call, label: '전화돌봄', count: phoneCareCount),
+                        SummaryItem(icon: Icons.home_rounded, label: '방문돌봄', count: fieldCareCount),
+                        SummaryItem(icon: Icons.local_taxi_rounded, label: '긴급출동', count: emergencyCount),
                       ],
                     ),
 
@@ -81,27 +137,45 @@ class _ReportManagementPageState extends State<ReportManagementPage> {
                     // 검색창
                     ReportSearchBar(
                       r: r,
-                      onSearch: _updateSearchResults,  // 검색 콜백 함수
-                      allTargets: _allTargets,         // 전체 대상자 리스트
+                      onSearch: _updateSearchResults,
+                      allTargets: _allTargets,
                     ),
 
                     SizedBox(height: r.sectionSpacing / 1.5),
 
-                    // 대상자 카드 그리드
-                    Center(
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _filteredTargets.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: r.itemSpacing,
-                          crossAxisSpacing: r.itemSpacing,
-                          childAspectRatio: 0.78,
+                    if (reportVM.isLoading && _allTargets.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24),
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    else if (_filteredTargets.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24),
+                        child: Center(child: Text('표시할 대상자가 없습니다.')),
+                      )
+                    else
+                      Center(
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            const crossAxisCount = 2;
+                            final cardWidth = (constraints.maxWidth - r.itemSpacing) / 2;
+                            final aspectRatio = (cardWidth / 230).clamp(0.68, 0.95).toDouble();
+
+                            return GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _filteredTargets.length,
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                mainAxisSpacing: r.itemSpacing,
+                                crossAxisSpacing: r.itemSpacing,
+                                childAspectRatio: aspectRatio,
+                              ),
+                              itemBuilder: (_, i) => TargetCard(r: r, data: _filteredTargets[i]),
+                            );
+                          },
                         ),
-                        itemBuilder: (_, i) => TargetCard(r: r, data: _filteredTargets[i]),
                       ),
-                    ),
 
                     SizedBox(height: r.sectionSpacing * 2),
                   ],

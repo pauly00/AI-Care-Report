@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safe_hi/model/monthly_report_item.dart';
-import 'package:safe_hi/view/report/report_1_new.dart';
+import 'package:safe_hi/view/report/report_1.dart';
 import 'package:safe_hi/widget/card/monthly_target.dart';
 
 class MonthlyTargetPage extends StatefulWidget {
@@ -73,7 +73,7 @@ class _MonthlyTargetPageState extends State<MonthlyTargetPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => Report1New(
+              builder: (_) => Report1(
                 targetName: widget.name, // MonthlyTargetPage에서 받은 name 전달
                 address: widget.address, // MonthlyTargetPage에서 받은 address 전달
               ),

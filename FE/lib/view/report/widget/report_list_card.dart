@@ -96,7 +96,10 @@ class ReportListCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Report1(),
+                  builder: (context) => Report1(
+                    targetName: target.targetName,
+                    address: target.address1,
+                  ),
                 ),
               );
             },

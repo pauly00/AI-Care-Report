@@ -2,6 +2,7 @@ class ReportTarget {
   final int reportId;
   final int reportStatus;
   final String visitTime;
+  final int? visitType;
   final int targetId;
   final String targetName;
   final String address1;
@@ -14,6 +15,7 @@ class ReportTarget {
     required this.reportId,
     required this.reportStatus,
     required this.visitTime,
+    required this.visitType,
     required this.targetId,
     required this.targetName,
     required this.address1,
@@ -27,6 +29,7 @@ class ReportTarget {
     int? reportId,
     int? reportStatus,
     String? visitTime,
+    int? visitType,
     int? targetId,
     String? targetName,
     String? address1,
@@ -39,6 +42,7 @@ class ReportTarget {
       reportId: reportId ?? this.reportId,
       reportStatus: reportStatus ?? this.reportStatus,
       visitTime: visitTime ?? this.visitTime,
+      visitType: visitType ?? this.visitType,
       targetId: targetId ?? this.targetId,
       targetName: targetName ?? this.targetName,
       address1: address1 ?? this.address1,
@@ -51,11 +55,19 @@ class ReportTarget {
 
   factory ReportTarget.fromJson(Map<String, dynamic> json) {
     final target = json['targetInfo'] ?? {};
+    final dynamic rawVisitType = json['visitType'] ?? json['visittype'];
+    int? parsedVisitType;
+    if (rawVisitType is int) {
+      parsedVisitType = rawVisitType;
+    } else if (rawVisitType is String) {
+      parsedVisitType = int.tryParse(rawVisitType);
+    }
 
     return ReportTarget(
       reportId: json['reportid'] ?? 0,
       reportStatus: json['reportstatus'] ?? 0,
       visitTime: json['visittime'] ?? '',
+      visitType: parsedVisitType,
       targetId: target['targetid'] ?? 0,
       targetName: target['targetname'] ?? '',
       address1: target['address1'] ?? '',

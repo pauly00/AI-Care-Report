@@ -84,4 +84,18 @@ class VisitSummaryService {
       throw Exception('요약 수정 업로드 실패: ${response.statusCode}');
     }
   }
+
+  /// STT 요약 조회
+  Future<Map<String, dynamic>> getConversationSummary(int summaryId) async {
+    final url = Uri.parse('$baseUrl/db/conversation-summary/$summaryId');
+    final headers = await buildAuthHeaders();
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('STT 요약 조회 실패: ${response.statusCode}');
+    }
+  }
 }

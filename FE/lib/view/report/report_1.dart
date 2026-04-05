@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_hi/repository/visit_summary_repository.dart';
 import 'package:safe_hi/service/visit_summary_service.dart';
-import 'package:safe_hi/view/report/report_1_1.dart';
 import 'package:safe_hi/view/report/report_2.dart';
 import 'package:safe_hi/view/report/widget/report_step_header.dart';
 import 'package:safe_hi/view_model/report_view_model.dart';
@@ -11,34 +10,262 @@ import 'package:safe_hi/view_model/visit_summary_view_model.dart';
 import 'package:safe_hi/widget/appbar/default_back_appbar.dart';
 import 'package:safe_hi/widget/button/bottom_one_btn.dart';
 import 'package:safe_hi/util/responsive.dart';
-import 'package:safe_hi/model/report_model.dart'; // 더미 모델 가져오기
-import 'package:safe_hi/model/user_model.dart'; // 더미 유저 가져오기
+import 'package:safe_hi/model/report_model.dart';
+import 'package:safe_hi/model/user_model.dart';
 
-// 돌봄 리포트 1단계 화면 - 기본 정보 입력 및 수정(미사용)
+/// 돌봄 리포트 1단계 화면 - 기본 정보 입력 및 수정
 class Report1 extends StatefulWidget {
-  const Report1({super.key});
+  const Report1({
+    super.key,
+    required this.targetName, // TargetCard에서 전달받을 이름
+    required this.address, // TargetCard에서 전달받을 주소
+  });
+
+  final String targetName; // 이름
+  final String address; // 주소
 
   @override
   State<Report1> createState() => _Report1State();
 }
 
 class _Report1State extends State<Report1> {
-  // 편집 모드 활성화 여부
-  bool _isEditing = false;
-  // 방문 시작 시간
   DateTime? _visitDateTime;
-  // 방문 종료 시간
   DateTime? _endDateTime;
-  // 돌봄 유형 (정기방문, 긴급방문 등)
   String _careType = '정기 방문';
+
+  /// 공통 색상
+  static const Color _primaryRed = Color(0xFFFB5457);
+  static const Color _borderPink = Color(0xFFF5CED1);
+  static const Color _labelGray = Color(0xFF9E9E9E);
+  static const Color _titleGray = Color(0xFF4A4A4A);
 
   @override
   void initState() {
     super.initState();
-    _endDateTime = DateTime.now(); // 초기 endTime 값 설정
+    _endDateTime = DateTime.now();
   }
 
-  // 날짜/시간 선택 위젯 빌더
+  /// 어르신 프로필 섹션
+  Widget elderProfileSection({
+    required String name,
+    required String address,
+    required String phone,
+    required String birth,
+    required String gender,
+    EdgeInsetsGeometry margin = const EdgeInsets.only(top: 0),
+  }) {
+    return Container(
+      margin: margin,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '어르신 프로필',
+            style: TextStyle(
+              color: _primaryRed,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 10),
+          _whiteCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _infoRow('주소', address),
+                const SizedBox(height: 8),
+                _infoRow('전화번호', phone),
+                const SizedBox(height: 8),
+                _infoRow('생년월일', birth),
+                const SizedBox(height: 8),
+                _infoRow('성별', gender),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 돌봄 매니저 프로필 섹션
+  Widget managerProfileSection({
+    required String managerName,
+    required String affiliation,
+    required String phone,
+    EdgeInsetsGeometry margin = const EdgeInsets.only(top: 24),
+  }) {
+    return Container(
+      margin: margin,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '돌봄 매니저 프로필',
+            style: TextStyle(
+              color: _primaryRed,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 10),
+          _whiteCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  managerName,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _infoRow('소속', affiliation),
+                const SizedBox(height: 8),
+                _infoRow('전화번호', phone),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 돌봄 횟수 섹션
+  Widget careCountSection({
+    required int visitCount,
+    required int callCount,
+    EdgeInsetsGeometry margin = const EdgeInsets.only(top: 24),
+  }) {
+    return Container(
+      margin: margin,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '돌봄 횟수',
+            style: TextStyle(
+              color: _primaryRed,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 10),
+          _whiteCard(
+            child: Row(
+              children: [
+                Expanded(
+                  child: _countPill(label: '방문돌봄', countText: '${visitCount}회'),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _countPill(label: '전화돌봄', countText: '${callCount}회'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 라벨/값 2열 행 위젯
+  Widget _infoRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 72,
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: _labelGray,
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: _titleGray,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 흰색 카드 위젯
+  Widget _whiteCard({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: _borderPink, width: 1.2),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x33F5CED1),
+            blurRadius: 6,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
+  /// 돌봄 횟수 Pill 위젯
+  Widget _countPill({required String label, required String countText}) {
+    return Container(
+      height: 56,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: const Color(0xFFE9E2E2)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: _titleGray,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            countText,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w900,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 날짜/시간 선택 위젯 빌더
   Widget _buildDateTimePicker({
     required String label,
     required DateTime dateTime,
@@ -49,17 +276,16 @@ class _Report1State extends State<Report1> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label, // "시작시간" 또는 "종료시간" 라벨 표시
+          label,
           style: TextStyle(
-            fontSize: responsive.fontBase, // 라벨 폰트 크기
+            fontSize: responsive.fontBase,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
-        SizedBox(height: 6), // 라벨과 박스 사이 간격
+        const SizedBox(height: 6),
         GestureDetector(
           onTap: () async {
-            // 날짜 선택 다이얼로그
             final pickedDate = await showDatePicker(
               context: context,
               initialDate: dateTime,
@@ -67,7 +293,6 @@ class _Report1State extends State<Report1> {
               lastDate: DateTime(2100),
             );
             if (pickedDate != null) {
-              // 시간 선택 다이얼로그
               final pickedTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay.fromDateTime(dateTime),
@@ -95,7 +320,7 @@ class _Report1State extends State<Report1> {
               dateTime.toString().substring(0, 16).replaceAll("T", " "),
               style: TextStyle(
                 color: Colors.black,
-                fontSize: responsive.fontBase, // 날짜/시간 폰트 크기
+                fontSize: responsive.fontBase,
               ),
             ),
           ),
@@ -109,48 +334,36 @@ class _Report1State extends State<Report1> {
     final responsive = Responsive(context);
     final report = Provider.of<ReportViewModel>(context).selectedTarget;
 
-    // 더미값 설정 (개발용)
-    if (report == null) { // 더미값 추가
+    // Provider를 통한 상태 관리
+    final userVM = context.watch<UserViewModel>();
+    final username = userVM.user?.name ?? 'OOO'; // 사용자 이름 가져오기
+
+    // report가 null인 경우에만 더미값 설정
+    if (report == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        // 동행 매니저 더미 데이터
-        final dummyUser = UserModel(
-          userId: 9999,
-          name: '홍길동',
-          email: 'test@example.com',
-          phoneNumber: '010-1234-5678',
-          birthDate: '1950-01-01',
-          gender: 1,
-          etc: '',
-          role: 1,
-        );
-
-        Provider.of<UserViewModel>(context, listen: false).setUser(dummyUser);
-
-        // 어르신 프로필 더미 데이터
-        final dummyTarget = ReportTarget(
+        // TargetCard에서 전달받은 이름과 주소 사용, 나머지는 더미값
+        final dummyTarget = ReportTarget( // 더미값 - 백엔드 연동 필요
           reportId: 9999,
           reportStatus: 9999,
           visitTime: '2025-08-01 10:00',
+          visitType: 1,
           targetId: 9999,
-          targetName: '테스트',
-          address1: '대전광역시 유성구 OO동',
-          address2: '경로당 1층',
-          phone: '010-1234-5678',
-          age: 77,
-          gender: 1,
+          targetName: widget.targetName, // TargetCard에서 전달받은 이름 사용
+          address1: widget.address, // TargetCard에서 전달받은 주소를 address1에 모두 넣기
+          address2: '', // address2는 빈 문자열로 처리(추후 정리 필요)
+          phone: '010-1234-5678', // 더미값
+          age: 77, // 더미값
+          gender: 1, // 더미값
         );
         Provider.of<ReportViewModel>(context, listen: false).setSelectedTarget(dummyTarget);
       });
     }
-
-    debugPrint("Report1에서 읽은 selectedTarget: $report");
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
         child: Column(
           children: [
-            // 상단 앱바
             const DefaultBackAppBar(title: '돌봄 리포트'),
             Expanded(
               child: report == null
@@ -169,268 +382,37 @@ class _Report1State extends State<Report1> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 단계 헤더와 수정 버튼
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          const ReportStepHeader(
-                            currentStep: 1,
-                            totalSteps: 6,
-                            stepTitle: 'step 1',
-                            stepSubtitle: '기본 정보',
-                          ),
-                          // 수정 버튼
-                          Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              height: responsive.modifyButton,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: responsive.cardSpacing),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFF4F4),
-                                borderRadius: BorderRadius.circular(6),
-                                border:
-                                Border.all(color: Color(0xFFFB5457)),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
-                                  setState(
-                                          () => _isEditing = !_isEditing);
-                                },
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: Size.zero,
-                                  tapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                child: AnimatedSwitcher(
-                                  duration:
-                                  const Duration(milliseconds: 300),
-                                  transitionBuilder: (child, animation) =>
-                                      FadeTransition(
-                                          opacity: animation,
-                                          child: child),
-                                  child: Row(
-                                    key: ValueKey(_isEditing),
-                                    children: [
-                                      Icon(Icons.edit_note_rounded,
-                                          size: responsive.iconSize * 0.6,
-                                          color: Color(0xFFFB5457)),
-                                      SizedBox(width: 4),
-                                      Text(
-                                        '수정',
-                                        style: TextStyle(
-                                            fontSize:
-                                            responsive.fontSmall,
-                                            color: Color(0xFFFB5457)),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      // 단계 헤더
+                      const ReportStepHeader(
+                        currentStep: 1,
+                        totalSteps: 5,
+                        stepTitle: 'step 1',
+                        stepSubtitle: '기본 정보',
                       ),
+
                       SizedBox(height: responsive.sectionSpacing),
 
-                      // 메인 정보 카드
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(responsive.cardSpacing),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFFFDD8DA),
-                              blurRadius: 4,
-                              offset: Offset(0, 0),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // 어르신 프로필 섹션
-                            Text('어르신 프로필',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red,
-                                    fontSize: responsive.fontLarge)),
-                            SizedBox(height: responsive.itemSpacing),
-                            Text(
-                              '${report.targetName}(${report.gender == 1 ? '남' : '여'}, 만 ${report.age}세)',
-                              style: TextStyle(
-                                  fontSize: responsive.fontBase),
-                            ),
-                            SizedBox(height: responsive.itemSpacing / 2),
-                            Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                    width: 120,
-                                    child: Text('주소',
-                                        style: TextStyle(
-                                            fontSize:
-                                            responsive.fontBase))),
-                                Expanded(
-                                    child: Text(report.address1,
-                                        style: TextStyle(
-                                            fontSize:
-                                            responsive.fontBase))),
-                              ],
-                            ),
-                            SizedBox(height: responsive.itemSpacing / 2),
-                            Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                    width: 120,
-                                    child: Text('전화번호',
-                                        style: TextStyle(
-                                            fontSize:
-                                            responsive.fontBase))),
-                                Expanded(
-                                    child: Text(report.phone,
-                                        style: TextStyle(
-                                            fontSize:
-                                            responsive.fontBase))),
-                              ],
-                            ),
-                            SizedBox(height: responsive.itemSpacing),
-
-                            // 동행 매니저 프로필 섹션
-                            Text('동행 매니저 프로필',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red,
-                                    fontSize: responsive.fontLarge)),
-                            SizedBox(height: responsive.itemSpacing),
-                            Text(
-                              '${Provider.of<UserViewModel>(context).user?.name ?? '이름없음'} 동행 매니저',
-                              style: TextStyle(
-                                  fontSize: responsive.fontBase),
-                            ),
-                            SizedBox(height: responsive.itemSpacing / 2),
-                            Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                    child: Text('대전 지부 OOO동 담당',
-                                        style: TextStyle(
-                                            fontSize:
-                                            responsive.fontBase))),
-                              ],
-                            ),
-                            SizedBox(height: responsive.itemSpacing),
-
-                            // 돌봄 진행 일시 섹션
-                            Text('돌봄 진행 일시',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red,
-                                    fontSize: responsive.fontLarge)),
-                            SizedBox(height: responsive.itemSpacing / 2),
-                            // 편집 모드에 따른 UI 변경
-                            _isEditing
-                                ? Row(
-                              children: [
-                                Expanded(
-                                    child: _buildDateTimePicker(
-                                      label: "시작시간",
-                                      dateTime: _visitDateTime ??
-                                          DateTime.tryParse(report
-                                              .visitTime
-                                              .replaceAll(" ", "T")) ??
-                                          DateTime.now(),
-                                      onPicked: (picked) {
-                                        setState(() =>
-                                        _visitDateTime = picked);
-                                        context
-                                            .read<ReportViewModel>()
-                                            .updateVisitTime(picked);
-                                      },
-                                      responsive: responsive,
-                                    )),
-                                SizedBox(width: 8),
-                                Text("~",
-                                    style: TextStyle(
-                                        fontSize:
-                                        responsive.fontBase)),
-                                SizedBox(width: 8),
-                                Expanded(
-                                    child: _buildDateTimePicker(
-                                      label: "종료시간",
-                                      dateTime: _endDateTime!,
-                                      onPicked: (picked) {
-                                        setState(() =>
-                                        _endDateTime = picked);
-                                      },
-                                      responsive: responsive,
-                                    )),
-                              ],
-                            )
-                                : Text(
-                              '${_visitDateTime?.toString().substring(0, 16).replaceAll("T", " ") ?? report.visitTime} ~ ${_endDateTime?.toString().substring(0, 16).replaceAll("T", " ")}',
-                              style: TextStyle(
-                                  fontSize: responsive.fontBase),
-                            ),
-                            SizedBox(height: responsive.itemSpacing),
-
-                            // 돌봄 유형 섹션
-                            Text('돌봄 유형',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red,
-                                    fontSize: responsive.fontLarge)),
-                            SizedBox(height: responsive.itemSpacing / 2),
-                            // 편집 모드에 따른 UI 변경 (드롭다운 또는 텍스트)
-                            _isEditing
-                                ? DropdownButton<String>(
-                              value: _careType,
-                              items: [
-                                DropdownMenuItem(
-                                  value: '정기 방문',
-                                  child: Text('정기 방문',
-                                      style: TextStyle(
-                                          fontSize:
-                                          responsive.fontBase)),
-                                ),
-                                DropdownMenuItem(
-                                  value: '긴급 방문',
-                                  child: Text('긴급 방문',
-                                      style: TextStyle(
-                                          fontSize:
-                                          responsive.fontBase)),
-                                ),
-                                DropdownMenuItem(
-                                  value: '전화 방문',
-                                  child: Text('전화 방문',
-                                      style: TextStyle(
-                                          fontSize:
-                                          responsive.fontBase)),
-                                ),
-                                DropdownMenuItem(
-                                  value: '기타',
-                                  child: Text('기타',
-                                      style: TextStyle(
-                                          fontSize:
-                                          responsive.fontBase)),
-                                ),
-                              ],
-                              onChanged: (value) => setState(
-                                      () => _careType = value!),
-                            )
-                                : Text(_careType,
-                                style: TextStyle(
-                                    fontSize: responsive.fontBase)),
-                          ],
-                        ),
+                      // 프로필 및 정보 섹션들
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          elderProfileSection(
+                            name: report.targetName, // TargetCard에서 전달받은 이름 사용
+                            address: report.address1, // address1만 사용 (address2는 null이므로)
+                            phone: report.phone,
+                            birth: '1955.04.02', // 더미값 - 백엔드 연동 필요
+                            gender: report.gender == 1 ? '남' : '여',
+                          ),
+                          managerProfileSection(
+                            managerName: '$username 돌봄 매니저', // Provider에서 가져온 실제 사용자명
+                            affiliation: '제주 이도 2동 담당', // 더미값 - 백엔드 연동 필요
+                            phone: userVM.user?.phoneNumber ?? '010-1234-5678', // Provider에서 가져온 실제 전화번호
+                          ),
+                          careCountSection(
+                            visitCount: 2, // 더미값 - 백엔드 연동 필요
+                            callCount: 2, // 더미값 - 백엔드 연동 필요
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -440,84 +422,26 @@ class _Report1State extends State<Report1> {
           ],
         ),
       ),
-      // 하단 버튼 (저장/다음)
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: responsive.paddingHorizontal),
         child: BottomOneButton(
-          buttonText: _isEditing ? '저장' : '다음',
+          buttonText: '다음',
           onButtonTap: () async {
-            // 편집 모드일 때는 저장하고 편집 모드 종료
-            if (_isEditing) {
-              setState(() => _isEditing = false);
-              return;
-            }
+            // 실제 사용자 정보 확인
+            debugPrint("현재 사용자: ${userVM.user?.name}");
+            debugPrint("현재 선택된 타겟: ${report?.targetName}");
 
-            // ViewModel에서 데이터 가져오기
-            final reportVM = context.read<ReportViewModel>();
-            final userVM = context.read<UserViewModel>();
-            final user = userVM.user;
-            final target = reportVM.selectedTarget;
-
-            // 서버 접속 시 사용할 유효성 검사 (현재 주석처리)
-            // if (user == null || target == null) {
-            //   ScaffoldMessenger.of(context).showSnackBar(
-            //     const SnackBar(content: Text('유저 정보 또는 대상자가 없습니다.')),
-            //   );
-            //   return;
-            // }
-
-            try {
-              // 업로드 요청 로그 출력 (더미 값 포함)
-              debugPrint(
-                  '[STEP1 업로드 요청] target: ${target?.targetName ?? '더미'}, user: ${user?.name ?? '더미'}, visitType: $_careType');
-
-              // 서버 업로드 (현재 주석처리)
-              // final result = await reportVM.submitReportStep1(
-              //   endTime: _endDateTime!.toString().substring(0, 16),
-              //   visitType: _careType,
-              //   user: user!, // null값 임의로 지정
-              // );
-              //
-              // debugPrint('[STEP1 업로드 결과] $result');
-
-              // 다음 화면으로 강제 이동 (개발용)
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ChangeNotifierProvider(
-                    create: (_) => VisitSummaryViewModel(
-                      repository: VisitSummaryRepository(service: VisitSummaryService()),
-                    )..fetchSummary(report!.reportId),
-                    child: const Report1_1(),
-                  ),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ChangeNotifierProvider(
+                  create: (_) => VisitSummaryViewModel(
+                    repository: VisitSummaryRepository(service: VisitSummaryService()),
+                  )..fetchSummary(report!.reportId),
+                  child: const Report2(),
                 ),
-              );
-
-              // 서버 연동 시 사용할 정상 처리 로직 (현재 주석처리)
-              // if (result['status'] == true) {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (_) => ChangeNotifierProvider(
-              //         create: (_) => VisitSummaryViewModel(
-              //           repository: VisitSummaryRepository(
-              //               service: VisitSummaryService()),
-              //         )..fetchSummary(report!.reportId),
-              //         child: const Report2(),
-              //       ),
-              //     ),
-              //   );
-              // } else {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //     SnackBar(content: Text(result['msg'] ?? '업로드 실패')),
-              //   );
-              // }
-            } catch (e) {
-              // 에러 처리
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('업로드 중 오류 발생: $e')),
-              );
-            }
+              ),
+            );
           },
         ),
       ),
