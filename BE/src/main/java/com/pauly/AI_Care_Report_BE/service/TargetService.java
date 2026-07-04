@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+// 대상자 비즈니스 서비스
 public class TargetService {
 
     private final TargetRepository targetRepository;

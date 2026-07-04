@@ -19,12 +19,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/db")
 @RequiredArgsConstructor
+// 방문 보고서 API 컨트롤러
 public class VisitReportController {
 
     private final VisitReportService visitReportService;
     private final UserRepository userRepository;
 
-    // POST /db/addVisitReport
+    // 방문 보고서 생성 API
     @PostMapping("/addVisitReport")
     public ResponseEntity<?> addVisitReport(@RequestBody VisitReportRequest request,
                                              @AuthenticationPrincipal UserDetails userDetails) {
@@ -37,7 +38,7 @@ public class VisitReportController {
         }
     }
 
-    // GET /db/getAllVisitReports
+    // 방문 보고서 목록 조회 API
     @GetMapping("/getAllVisitReports")
     public ResponseEntity<List<VisitReportResponse>> getAllVisitReports(
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -45,7 +46,7 @@ public class VisitReportController {
         return ResponseEntity.ok(visitReportService.getAllVisitReports(user));
     }
 
-    // GET /db/getDefaultReportList (보고서 작성 화면용 - 미완료 목록)
+    // 기본 보고서 목록 조회 API
     @GetMapping("/getDefaultReportList")
     public ResponseEntity<List<VisitReportResponse>> getDefaultReportList(
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -53,7 +54,7 @@ public class VisitReportController {
         return ResponseEntity.ok(visitReportService.getAllVisitReports(user));
     }
 
-    // GET /db/getTodayList
+    // 오늘 방문 목록 조회 API
     @GetMapping("/getTodayList")
     public ResponseEntity<List<Map<String, Object>>> getTodayList(
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -61,7 +62,7 @@ public class VisitReportController {
         return ResponseEntity.ok(visitReportService.getTodayList(user));
     }
 
-    // POST /db/getTodayList (today_visit_service.dart 에서 POST로 호출)
+    // 오늘 방문 목록 호환 API
     @PostMapping("/getTodayList")
     public ResponseEntity<List<Map<String, Object>>> getTodayListPost(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -70,7 +71,7 @@ public class VisitReportController {
         return ResponseEntity.ok(visitReportService.getTodayList(user));
     }
 
-    // POST /db/uploadReportDefaultInfo
+    // 보고서 기본 정보 저장 API
     @PostMapping("/uploadReportDefaultInfo")
     public ResponseEntity<?> uploadDefaultReport(@RequestBody UploadDefaultReportRequest request) {
         try {
@@ -81,7 +82,7 @@ public class VisitReportController {
         }
     }
 
-    // POST /db/uploadVisitDetail
+    // 방문 상세 저장 API
     @PostMapping("/uploadVisitDetail")
     public ResponseEntity<?> uploadVisitDetail(@RequestBody UploadVisitDetailRequest request) {
         try {
@@ -92,7 +93,7 @@ public class VisitReportController {
         }
     }
 
-    // GET /db/visitReportDone?reportid=X
+    // 방문 완료 처리 API
     @GetMapping("/visitReportDone")
     public ResponseEntity<?> visitReportDone(@RequestParam Long reportid) {
         try {
@@ -103,7 +104,7 @@ public class VisitReportController {
         }
     }
 
-    // POST /db/uploadCallRecord (multipart)
+    // 통화 녹음 업로드 API
     @PostMapping("/uploadCallRecord")
     public ResponseEntity<?> uploadCallRecord(@RequestParam("reportid") Long reportId,
                                                @RequestParam("audiofile") MultipartFile audioFile) {
@@ -117,7 +118,7 @@ public class VisitReportController {
         }
     }
 
-    // GET /db/getConverstationSTTtxt/:id
+    // STT 원문 조회 API
     @GetMapping("/getConverstationSTTtxt/{id}")
     public ResponseEntity<?> getSttText(@PathVariable Long id) {
         try {
@@ -128,7 +129,7 @@ public class VisitReportController {
         }
     }
 
-    // GET /db/getVisitDetails/:id (요약 정보 조회)
+    // 방문 요약 조회 API
     @GetMapping("/getVisitDetails/{id}")
     public ResponseEntity<?> getVisitDetails(@PathVariable Long id) {
         try {
@@ -139,7 +140,7 @@ public class VisitReportController {
         }
     }
 
-    // POST /db/uploadEditAbstract (요약 수정 저장)
+    // 방문 요약 수정 API
     @PostMapping("/uploadEditAbstract")
     public ResponseEntity<?> uploadEditAbstract(@RequestBody UploadSummaryRequest request) {
         try {
@@ -150,7 +151,7 @@ public class VisitReportController {
         }
     }
 
-    // POST /db/uploadImages (multipart)
+    // 방문 이미지 업로드 API
     @PostMapping("/uploadImages")
     public ResponseEntity<?> uploadImages(@RequestParam("reportid") Long reportId,
                                           @RequestParam("images") List<MultipartFile> images) {

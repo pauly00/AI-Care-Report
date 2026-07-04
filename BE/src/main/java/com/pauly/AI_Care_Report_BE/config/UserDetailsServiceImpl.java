@@ -13,6 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+// 사용자 인증 정보 서비스
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;

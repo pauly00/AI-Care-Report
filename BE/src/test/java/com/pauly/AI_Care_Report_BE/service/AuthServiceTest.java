@@ -48,7 +48,7 @@ class AuthServiceTest {
                 .build();
     }
 
-    // ── 로그인 ──────────────────────────────────────────
+    // 로그인 테스트
 
     @Test
     @DisplayName("로그인 성공 - token과 user 정보 반환")
@@ -97,7 +97,7 @@ class AuthServiceTest {
                 .hasMessageContaining("이메일 또는 비밀번호");
     }
 
-    // ── 회원가입 ────────────────────────────────────────
+    // 회원가입 테스트
 
     @Test
     @DisplayName("회원가입 성공 - 저장 후 user 정보 반환")
@@ -136,7 +136,7 @@ class AuthServiceTest {
                 .hasMessageContaining("이미 사용 중인 이메일");
     }
 
-    // ── 이메일 중복 체크 ────────────────────────────────
+    // 이메일 중복 체크 테스트
 
     @Test
     @DisplayName("이메일 사용 가능 - true 반환")
@@ -152,7 +152,7 @@ class AuthServiceTest {
         assertThat(authService.isEmailAvailable("taken@test.com")).isFalse();
     }
 
-    // ── 내 정보 조회 ────────────────────────────────────
+    // 내 정보 조회 테스트
 
     @Test
     @DisplayName("이메일로 유저 조회 성공 - UserResponse 반환")

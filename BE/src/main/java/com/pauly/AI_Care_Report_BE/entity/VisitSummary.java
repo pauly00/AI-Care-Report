@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// 방문 요약 엔티티
 public class VisitSummary {
 
     @Id
@@ -19,10 +20,12 @@ public class VisitSummary {
     @JoinColumn(name = "report_id")
     private VisitReport report;
 
-    private String subject; // 건강, 경제, 생활, 기타
+    // 요약 주제
+    private String subject;
 
     @Column(columnDefinition = "TEXT")
-    private String summaryText; // JSON 'abstract' 필드 (abstract는 Java 예약어)
+    // 요약 본문
+    private String summaryText;
 
     @Column(columnDefinition = "TEXT")
     private String detail;

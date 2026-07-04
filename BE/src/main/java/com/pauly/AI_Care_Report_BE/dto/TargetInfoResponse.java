@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Data
 @Builder
+// 대상자 상세 응답 DTO
 public class TargetInfoResponse {
 
     private Long targetid;

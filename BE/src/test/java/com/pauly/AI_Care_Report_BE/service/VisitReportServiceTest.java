@@ -61,7 +61,7 @@ class VisitReportServiceTest {
                 .build();
     }
 
-    // ── 방문 보고서 생성 ────────────────────────────────
+    // 방문 보고서 생성 테스트
 
     @Test
     @DisplayName("방문 보고서 생성 성공 - reportstatus=0으로 저장")
@@ -92,7 +92,7 @@ class VisitReportServiceTest {
                 .hasMessageContaining("대상자를 찾을 수 없습니다");
     }
 
-    // ── 전체 방문 목록 조회 ─────────────────────────────
+    // 전체 방문 목록 조회 테스트
 
     @Test
     @DisplayName("전체 방문 보고서 조회 - 유저 소속 보고서 목록 반환")
@@ -107,7 +107,7 @@ class VisitReportServiceTest {
         assertThat(result.get(0).getReportid()).isEqualTo(1L);
     }
 
-    // ── 특이사항 업로드 ─────────────────────────────────
+    // 특이사항 저장 테스트
 
     @Test
     @DisplayName("특이사항 저장 성공 - detail 필드 업데이트")
@@ -139,7 +139,7 @@ class VisitReportServiceTest {
                 .hasMessageContaining("보고서를 찾을 수 없습니다");
     }
 
-    // ── 상담 완료 처리 ──────────────────────────────────
+    // 상담 완료 처리 테스트
 
     @Test
     @DisplayName("상담 완료 처리 - reportstatus가 2로 변경됨")
@@ -162,7 +162,7 @@ class VisitReportServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    // ── STT 텍스트 조회 ─────────────────────────────────
+    // STT 텍스트 조회 테스트
 
     @Test
     @DisplayName("STT 텍스트 조회 성공 - sttText 반환")
@@ -190,7 +190,7 @@ class VisitReportServiceTest {
         assertThat(result).isEmpty();
     }
 
-    // ── 방문 요약 조회 ──────────────────────────────────
+    // 방문 요약 조회 테스트
 
     @Test
     @DisplayName("방문 요약 조회 - reportid와 items 포함")

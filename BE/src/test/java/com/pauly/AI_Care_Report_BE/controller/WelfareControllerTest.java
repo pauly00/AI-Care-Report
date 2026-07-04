@@ -6,6 +6,7 @@ import com.pauly.AI_Care_Report_BE.service.WelfareService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(WelfareController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class WelfareControllerTest {
 
     @Autowired
@@ -48,7 +50,7 @@ class WelfareControllerTest {
         );
     }
 
-    // ── 대상자별 복지 정책 조회 ─────────────────────────
+    // 대상자별 복지정책 조회 테스트
 
     @Test
     @WithMockUser
@@ -85,7 +87,7 @@ class WelfareControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // ── 전체 복지 정책 조회 ─────────────────────────────
+    // 전체 복지정책 조회 테스트
 
     @Test
     @WithMockUser
@@ -104,7 +106,7 @@ class WelfareControllerTest {
                 .andExpect(jsonPath("$.length()").value(3));
     }
 
-    // ── 특정 정책 상세 조회 ─────────────────────────────
+    // 정책 상세 조회 테스트
 
     @Test
     @WithMockUser
@@ -130,7 +132,7 @@ class WelfareControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // ── 정책 체크 상태 업로드 ───────────────────────────
+    // 정책 체크 저장 테스트
 
     @Test
     @WithMockUser

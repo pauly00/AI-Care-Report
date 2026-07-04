@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+// 방문 보고서 데이터 접근 인터페이스
 public interface VisitReportRepository extends JpaRepository<VisitReport, Long> {
 
     List<VisitReport> findByUser(User user);

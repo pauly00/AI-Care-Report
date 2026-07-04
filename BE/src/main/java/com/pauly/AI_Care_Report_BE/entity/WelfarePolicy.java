@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// 복지정책 엔티티
 public class WelfarePolicy {
 
     @Id
@@ -21,9 +22,11 @@ public class WelfarePolicy {
     private String shortDescription;
 
     @Column(columnDefinition = "TEXT")
-    private String detailedConditions; // JSON 배열 문자열로 저장
+    // 상세 조건
+    private String detailedConditions;
 
     private String link;
 
-    private String region; // 서울, 경기 등 지역 필터링용
+    // 정책 지역
+    private String region;
 }

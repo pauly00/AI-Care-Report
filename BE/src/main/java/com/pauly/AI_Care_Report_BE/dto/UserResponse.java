@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
+// 사용자 응답 DTO
 public class UserResponse {
 
     @JsonProperty("user_id")

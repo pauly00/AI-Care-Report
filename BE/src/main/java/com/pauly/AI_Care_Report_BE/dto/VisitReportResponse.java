@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Data
 @Builder
+// 방문 보고서 응답 DTO
 public class VisitReportResponse {
 
     private Long reportid;

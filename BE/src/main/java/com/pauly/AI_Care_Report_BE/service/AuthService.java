@@ -14,6 +14,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+// 인증 비즈니스 서비스
 public class AuthService {
 
     private final UserRepository userRepository;

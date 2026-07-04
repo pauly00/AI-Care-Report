@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+// 방문 요약 데이터 접근 인터페이스
 public interface VisitSummaryRepository extends JpaRepository<VisitSummary, Long> {
 
     List<VisitSummary> findByReport(VisitReport report);

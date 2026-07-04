@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+// 복지정책 비즈니스 서비스
 public class WelfareService {
 
     private final WelfarePolicyRepository welfarePolicyRepository;
@@ -22,12 +23,12 @@ public class WelfareService {
     private final TargetRepository targetRepository;
     private final ObjectMapper objectMapper;
 
-    // 대상자에 맞는 복지 정책 조회
     public Map<String, Object> getWelfarePoliciesForTarget(Long targetId) {
+        // 대상자별 복지정책 조회
         Target target = targetRepository.findById(targetId)
                 .orElseThrow(() -> new IllegalArgumentException("대상자를 찾을 수 없습니다."));
 
-        // 지역 기반 필터링 (지역 없으면 전체 반환)
+        // 지역 기반 정책 필터링
         List<WelfarePolicy> policies;
         if (target.getRegion() != null && !target.getRegion().isBlank()) {
             policies = welfarePolicyRepository.findByRegion(target.getRegion());
@@ -57,8 +58,8 @@ public class WelfareService {
         );
     }
 
-    // 전체 복지 정책 조회
     public List<Map<String, Object>> getAllPolicies() {
+        // 전체 복지정책 조회
         return welfarePolicyRepository.findAll().stream().map(p -> {
             Map<String, Object> item = new HashMap<>();
             item.put("id", p.getId());
@@ -71,8 +72,8 @@ public class WelfareService {
         }).collect(Collectors.toList());
     }
 
-    // 특정 정책 상세 조회
     public Map<String, Object> getPolicyById(Long policyId) {
+        // 복지정책 상세 조회
         WelfarePolicy p = welfarePolicyRepository.findById(policyId)
                 .orElseThrow(() -> new IllegalArgumentException("정책을 찾을 수 없습니다."));
 
@@ -86,9 +87,9 @@ public class WelfareService {
         return item;
     }
 
-    // 정책 체크 상태 업로드
     @Transactional
     public void uploadPolicyCheckStatus(UploadPolicyRequest request) {
+        // 복지정책 체크 저장
         VisitReport report = visitReportRepository.findById(request.getReportid())
                 .orElseThrow(() -> new IllegalArgumentException("보고서를 찾을 수 없습니다."));
 

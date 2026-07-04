@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// 대상자 엔티티
 public class Target {
 
     @Id
@@ -25,7 +26,8 @@ public class Target {
 
     private String targetcallnum;
 
-    private Integer gender; // 0=남성, 1=여성
+    // 성별 코드
+    private Integer gender;
 
     private Integer age;
 
@@ -33,7 +35,8 @@ public class Target {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user; // 담당 사회복지사
+    // 담당 사회복지사
+    private User user;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;

@@ -12,11 +12,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/db")
 @RequiredArgsConstructor
+// 복지정책 API 컨트롤러
 public class WelfareController {
 
     private final WelfareService welfareService;
 
-    // GET /db/welfare-policies/:targetId (대상자별 정책)
+    // 대상자별 복지정책 조회 API
     @GetMapping("/welfare-policies/{targetId}")
     public ResponseEntity<?> getWelfarePoliciesForTarget(@PathVariable Long targetId) {
         try {
@@ -27,13 +28,13 @@ public class WelfareController {
         }
     }
 
-    // GET /db/welfare-policies (전체 정책)
+    // 전체 복지정책 조회 API
     @GetMapping("/welfare-policies")
     public ResponseEntity<List<Map<String, Object>>> getAllPolicies() {
         return ResponseEntity.ok(welfareService.getAllPolicies());
     }
 
-    // GET /db/policies/:id (특정 정책 상세)
+    // 복지정책 상세 조회 API
     @GetMapping("/policies/{id}")
     public ResponseEntity<?> getPolicyById(@PathVariable Long id) {
         try {
@@ -44,7 +45,7 @@ public class WelfareController {
         }
     }
 
-    // POST /db/uploadCheckPolicy
+    // 복지정책 체크 저장 API
     @PostMapping("/uploadCheckPolicy")
     public ResponseEntity<?> uploadCheckPolicy(@RequestBody UploadPolicyRequest request) {
         try {

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// 사용자 엔티티
 public class User {
 
     @Id
@@ -25,15 +26,18 @@ public class User {
 
     private String name;
 
-    private String role; // SOCIAL_WORKER, ADMIN 등
+    // 사용자 역할
+    private String role;
 
     private String phoneNumber;
 
     private String birthdate;
 
-    private Integer gender; // 0=남성, 1=여성
+    // 성별 코드
+    private Integer gender;
 
-    private Integer permission; // 1=사회복지사, 2=관리자
+    // 권한 코드
+    private Integer permission;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;

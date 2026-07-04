@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// 방문 보고서 엔티티
 public class VisitReport {
 
     @Id
@@ -25,19 +26,24 @@ public class VisitReport {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String visittime; // "2024-01-01 10:00"
+    // 방문 예정 시간
+    private String visittime;
 
-    private Integer reportstatus; // 0=예정, 1=진행중, 2=완료
+    // 보고서 상태 코드
+    private Integer reportstatus;
 
-    private String visittype; // "전화돌봄", "현장돌봄"
+    // 방문 유형
+    private String visittype;
 
     private String endtime;
 
     @Column(columnDefinition = "TEXT")
-    private String detail; // 특이사항
+    // 특이사항
+    private String detail;
 
     @Column(columnDefinition = "TEXT")
-    private String sttText; // STT 변환 텍스트
+    // STT 변환 텍스트
+    private String sttText;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;

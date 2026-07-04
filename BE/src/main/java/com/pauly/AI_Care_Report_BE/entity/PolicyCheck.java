@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// 정책 체크 엔티티
 public class PolicyCheck {
 
     @Id
@@ -23,5 +24,6 @@ public class PolicyCheck {
     @JoinColumn(name = "policy_id")
     private WelfarePolicy policy;
 
-    private Integer checkStatus; // 1=해당, 0=미해당
+    // 정책 해당 여부
+    private Integer checkStatus;
 }

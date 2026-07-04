@@ -22,6 +22,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+// Spring Security 설정
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;

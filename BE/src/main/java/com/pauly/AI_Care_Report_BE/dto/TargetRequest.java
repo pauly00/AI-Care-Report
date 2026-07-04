@@ -3,6 +3,7 @@ package com.pauly.AI_Care_Report_BE.dto;
 import lombok.Data;
 
 @Data
+// 대상자 등록 요청 DTO
 public class TargetRequest {
     private String targetname;
     private String address1;

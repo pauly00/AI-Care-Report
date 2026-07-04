@@ -17,12 +17,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/db")
 @RequiredArgsConstructor
+// 인증 API 컨트롤러
 public class AuthController {
 
     private final AuthService authService;
     private final UserRepository userRepository;
 
-    // POST /db/login
+    // 로그인 API
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
@@ -33,7 +34,7 @@ public class AuthController {
         }
     }
 
-    // POST /db/register
+    // 회원가입 API
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
@@ -44,7 +45,7 @@ public class AuthController {
         }
     }
 
-    // POST /db/email_check
+    // 이메일 중복 확인 API
     @PostMapping("/email_check")
     public ResponseEntity<?> emailCheck(@RequestBody Map<String, String> body) {
         String email = body.get("email");
@@ -55,7 +56,7 @@ public class AuthController {
         ));
     }
 
-    // GET /db/users (JWT 필요 - 내 정보 조회)
+    // 내 정보 조회 API
     @GetMapping("/users")
     public ResponseEntity<?> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
         try {

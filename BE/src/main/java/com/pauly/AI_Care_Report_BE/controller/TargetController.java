@@ -18,12 +18,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/db")
 @RequiredArgsConstructor
+// 대상자 API 컨트롤러
 public class TargetController {
 
     private final TargetService targetService;
     private final UserRepository userRepository;
 
-    // POST /db/addTarget
+    // 대상자 등록 API
     @PostMapping("/addTarget")
     public ResponseEntity<?> addTarget(@RequestBody TargetRequest request,
                                        @AuthenticationPrincipal UserDetails userDetails) {
@@ -32,14 +33,14 @@ public class TargetController {
         return ResponseEntity.ok(Map.of("status", true, "targetid", target.getId()));
     }
 
-    // GET /db/getAllTargets
+    // 대상자 목록 조회 API
     @GetMapping("/getAllTargets")
     public ResponseEntity<List<Target>> getAllTargets(@AuthenticationPrincipal UserDetails userDetails) {
         User user = getUser(userDetails);
         return ResponseEntity.ok(targetService.getAllTargets(user));
     }
 
-    // GET /db/getTargetInfo/:id
+    // 대상자 상세 조회 API
     @GetMapping("/getTargetInfo/{id}")
     public ResponseEntity<?> getTargetInfo(@PathVariable Long id) {
         try {

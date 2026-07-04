@@ -36,6 +36,7 @@ import java.util.Random;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+// 개발용 초기 데이터 생성기
 public class DevDataSeeder implements ApplicationRunner {
 
     private final UserRepository userRepository;
