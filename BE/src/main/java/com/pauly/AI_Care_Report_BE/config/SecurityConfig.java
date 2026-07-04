@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +26,22 @@ import java.util.List;
 // Spring Security 설정
 public class SecurityConfig {
 
+    private static final String[] PUBLIC_API_PATHS = {
+            "/",
+            "/api/hello"
+    };
+
+    private static final String[] AUTH_API_PATHS = {
+            "/db/login",
+            "/db/register",
+            "/db/email_check"
+    };
+
+    private static final String[] SWAGGER_PATHS = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
+    };
+
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
@@ -35,18 +52,19 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/db/login",
-                                "/db/register",
-                                "/db/email_check",
-                                "/api/hello"
-                        ).permitAll()
+                        .requestMatchers(PUBLIC_API_PATHS).permitAll()
+                        .requestMatchers(AUTH_API_PATHS).permitAll()
+                        .requestMatchers(SWAGGER_PATHS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(PUBLIC_API_PATHS);
     }
 
     @Bean
