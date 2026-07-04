@@ -75,7 +75,7 @@ class _CheckListReadyState extends State<CheckListReady> {
     } catch (e) {
       debugPrint('❌ WebSocket 연결 실패: $e');
       if (mounted) {
-        _showRetryDialog(); // ✅ 실패하면 retry 팝업 띄우기
+        _showRetryDialog();
       }
     } finally {
       if (mounted) setState(() => _isConnecting = false);
@@ -92,9 +92,9 @@ class _CheckListReadyState extends State<CheckListReady> {
         actions: [
           TextButton(
             onPressed: () async {
-              Navigator.of(context).pop(); // 팝업 닫기
+              Navigator.of(context).pop();
 
-              await _connectToServer(); // ✅ 다시 연결 시도!
+              await _connectToServer();
             },
             child: const Text('다시 시도'),
           ),

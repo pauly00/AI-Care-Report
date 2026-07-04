@@ -6,7 +6,7 @@ import 'package:safe_hi/widget/appbar/default_appbar.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:url_launcher/url_launcher.dart'; // 전화 기능을 위한 import 추가
+import 'package:url_launcher/url_launcher.dart';
 
 class VisitListPage extends StatefulWidget {
   const VisitListPage({super.key});
@@ -15,7 +15,7 @@ class VisitListPage extends StatefulWidget {
   State<VisitListPage> createState() => _VisitListPageState();
 }
 
-/// 필터 버튼 선택 상태 관리용 enum
+// 필터 버튼 선택 상태 관리용 enum
 enum SelectedButton { all, phone, field }
 
 class _VisitListPageState extends State<VisitListPage> {
@@ -23,7 +23,7 @@ class _VisitListPageState extends State<VisitListPage> {
   final ValueNotifier<DateTime> _selectedDateNotifier = ValueNotifier(DateTime.now());
   final ValueNotifier<SelectedButton> _selectedButtonNotifier = ValueNotifier(SelectedButton.all);
 
-  /// 한국어 로케일 초기화
+  // 한국어 로케일 초기화
   Future<void> _initializeLocale() async {
     await initializeDateFormatting('ko_KR', null);
     Intl.defaultLocale = 'ko_KR';
@@ -32,7 +32,7 @@ class _VisitListPageState extends State<VisitListPage> {
   @override
   void initState() {
     super.initState();
-    /// 페이지 로드 시 오늘 방문자 데이터 가져오기
+    // 페이지 로드 시 오늘 방문자 데이터 가져오기
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<VisitViewModel>().fetchTodayVisits();
     });
@@ -69,7 +69,7 @@ class _VisitListPageState extends State<VisitListPage> {
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
                     child: Column(
                       children: [
-                        /// 주간 캘린더 위젯
+                        // 주간 캘린더 위젯
                         ValueListenableBuilder<DateTime>(
                           valueListenable: _selectedDateNotifier,
                           builder: (context, selectedDate, child) {
@@ -81,11 +81,11 @@ class _VisitListPageState extends State<VisitListPage> {
                               minDate: DateTime.now().add(const Duration(days: -365)),
                               maxDate: DateTime.now().add(const Duration(days: 365)),
 
-                              /// 선택된 날짜 스타일링
+                              // 선택된 날짜 스타일링
                               pressedDateBackgroundColor: const Color(0xFFFB5457),
                               pressedDateStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
 
-                              /// 캘린더 텍스트 스타일
+                              // 캘린더 텍스트 스타일
                               dayOfWeekStyle: const TextStyle(color: Color(0xFF433A3A)),
                               todayDateStyle: const TextStyle(color: Color(0xFFFB5457)),
                               dateStyle: const TextStyle(color: Color(0xFF433A3A)),
@@ -94,18 +94,18 @@ class _VisitListPageState extends State<VisitListPage> {
                                 child: Text(DateFormat.yMMMM('ko_KR').format(time)),
                               ),
 
-                              /// 요일 설정 (일요일부터 시작)
+                              // 요일 설정 (일요일부터 시작)
                               dayOfWeek: const ['월', '화', '수', '목', '금', '토', '일'],
                               weekendsIndexes: const [5, 6],
 
-                              /// 날짜 선택 시 해당 날짜의 방문자 데이터 조회
+                              // 날짜 선택 시 해당 날짜의 방문자 데이터 조회
                               onDatePressed: (DateTime datetime) {
                                 _selectedDateNotifier.value = datetime;
                                 final dateStr = DateFormat('yyyy-MM-dd').format(datetime);
                                 context.read<VisitViewModel>().fetchVisitsByDate(dateStr);
                               },
 
-                              /// 선택된 날짜 표시용 장식
+                              // 선택된 날짜 표시용 장식
                               decorations: [
                                 DecorationItem(
                                   date: selectedDate,
@@ -123,7 +123,7 @@ class _VisitListPageState extends State<VisitListPage> {
                           },
                         ),
 
-                        /// 방문 유형 필터 버튼 (전체보기/전화돌봄/현장돌봄)
+                        // 방문 유형 필터 버튼 (전체보기/전화돌봄/현장돌봄)
                         ValueListenableBuilder<SelectedButton>(
                           valueListenable: _selectedButtonNotifier,
                           builder: (context, selectedButton, child) {
@@ -131,7 +131,7 @@ class _VisitListPageState extends State<VisitListPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
                               child: Row(
                                 children: [
-                                  /// 전체보기 버튼
+                                  // 전체보기 버튼
                                   Expanded(
                                     child: OutlinedButton(
                                       onPressed: () {
@@ -159,7 +159,7 @@ class _VisitListPageState extends State<VisitListPage> {
 
                                   const SizedBox(width: 8),
 
-                                  /// 전화돌봄 버튼
+                                  // 전화돌봄 버튼
                                   Expanded(
                                     child: OutlinedButton(
                                       onPressed: () {
@@ -187,7 +187,7 @@ class _VisitListPageState extends State<VisitListPage> {
 
                                   const SizedBox(width: 8),
 
-                                  /// 현장돌봄 버튼
+                                  // 현장돌봄 버튼
                                   Expanded(
                                     child: OutlinedButton(
                                       onPressed: () {
@@ -218,7 +218,7 @@ class _VisitListPageState extends State<VisitListPage> {
                           },
                         ),
 
-                        /// 방문자 리스트 영역
+                        // 방문자 리스트 영역
                         Expanded(
                           child: Consumer<VisitViewModel>(
                             builder: (context, visitVM, _) {

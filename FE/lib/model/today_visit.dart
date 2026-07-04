@@ -2,7 +2,7 @@
 class TodayVisit {
   final int reportid;
   final String visitTime;
-  final int visitType; // 0: 전화돌봄 1: 현장돌봄
+  final int visitType;
   final String address;
   final String name;
   final String callNum;

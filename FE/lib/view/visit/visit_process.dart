@@ -6,7 +6,7 @@ import 'package:safe_hi/service/audio_service.dart';
 import 'package:safe_hi/util/responsive.dart';
 import 'package:safe_hi/widget/appbar/default_back_appbar.dart';
 import 'package:safe_hi/widget/button/bottom_two_btn.dart';
-import 'package:safe_hi/view/visit/visit_check1.dart';
+import 'package:safe_hi/view/visit/visit_environment_check.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class VisitProcess extends StatefulWidget {
@@ -32,8 +32,8 @@ class VisitProcessState extends State<VisitProcess>
   late Animation<double> _pulseAnimation;
   bool _isReconnectDialogVisible = false;
 
-  StreamSubscription? _wsSub; // 현재 listen 보관
-  bool _reconnecting = false; // 중복 재시도 방지
+  StreamSubscription? _wsSub;
+  bool _reconnecting = false;
 
   Timer? _noAudioTimer;
   bool _hasReceivedAudio = false;
@@ -141,20 +141,20 @@ class VisitProcessState extends State<VisitProcess>
   }
 
   Future<void> _tryReconnect() async {
-    if (_reconnecting) return; // 동시에 두 번 못 들어오게
+    if (_reconnecting) return;
     _reconnecting = true;
 
-    // 0) 기존 세션 정리
+    // 기존 세션 정리
     _wsSub?.cancel();
-    await widget.audio.stopRecording(); // 🎙 녹음 확실히 중단
+    await widget.audio.stopRecording();
     widget.ws.disconnect();
 
-    // 1) 최대 3회 재시도
+    // 최대 3회 재시도
     const url = 'https://safe-hi.xyz';
     bool ok = false;
     for (int i = 0; i < 3 && !ok; i++) {
       try {
-        await widget.ws.connect(url); // 소켓 열기
+        await widget.ws.connect(url);
         ok = true;
       } catch (_) {
         await Future.delayed(const Duration(seconds: 2));
@@ -163,11 +163,11 @@ class VisitProcessState extends State<VisitProcess>
 
     if (!ok) {
       _reconnecting = false;
-      if (mounted) _showReconnectDialog(); // 다시‑시도 팝업
+      if (mounted) _showReconnectDialog();
       return;
     }
 
-    // 2) 새로 listen 등록 (이전에 cancel 했으므로 안전)
+    // 새로 listen 등록
     _wsSub = widget.ws.stream?.listen(
       (msg) {
         setState(() => _sttTexts.add(msg.toString()));
@@ -182,7 +182,7 @@ class VisitProcessState extends State<VisitProcess>
       cancelOnError: true,
     );
 
-    // 3) 녹음 재시작
+    // 녹음 재시작
     await widget.audio.startRecording();
 
     _reconnecting = false;
@@ -219,8 +219,8 @@ class VisitProcessState extends State<VisitProcess>
               // 팝업 닫힌 다음 프레임에서 다시 재시도
               WidgetsBinding.instance.addPostFrameCallback((_) async {
                 await Future.delayed(
-                    const Duration(milliseconds: 200)); // 💡 약간의 여유 줌
-                await _tryReconnect(); // 실패하면 다시 showReconnectDialog 호출됨
+                    const Duration(milliseconds: 200));
+                await _tryReconnect();
               });
             },
             child: const Text('확인 후 다시 연결'),
@@ -338,7 +338,7 @@ class VisitProcessState extends State<VisitProcess>
             if (!mounted) return;
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Check1()),
+              MaterialPageRoute(builder: (context) => const VisitEnvironmentCheckPage()),
             );
           },
         ),

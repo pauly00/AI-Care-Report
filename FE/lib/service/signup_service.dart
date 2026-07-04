@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:safe_hi/core/constants.dart';
 import 'package:safe_hi/model/user_register_model.dart';
 
-/// 회원가입 관련 API 통신을 담당하는 서비스 클래스
+// 회원가입 관련 API 통신을 담당하는 서비스 클래스
 class SignupService {
   static const String baseUrl = ApiConfig.baseUrl;
 
-  /// 사용자 회원가입 요청
+  // 사용자 회원가입 요청
   static Future<Map<String, dynamic>> register(UserRegisterModel user) async {
     debugPrint('[회원가입 요청 시작]');
     debugPrint('요청 바디: ${jsonEncode(user.toJson())}');
@@ -47,13 +47,13 @@ class SignupService {
     }
 
     // 더미 응답 데이터
-    await Future.delayed(const Duration(seconds: 1)); // 네트워크 지연 시뮬레이션
+    await Future.delayed(const Duration(seconds: 1));
 
     return {
       "status": true,
       "message": "User registered successfully",
       "user": {
-        "user_id": 123, // 더미값 - 백엔드 연동 필요
+        "user_id": 123,
         "name": user.name,
         "phone_number": user.phoneNumber,
         "email": user.email,

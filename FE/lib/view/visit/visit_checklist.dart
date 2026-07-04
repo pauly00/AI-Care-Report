@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_hi/view/visit/visit_report.dart';
 import 'package:safe_hi/widget/appbar/default_back_appbar.dart';
 
-/// 현장 체크리스트 화면 - 방문 상태 체크 및 담당자 메모 작성
+// 현장 체크리스트 화면 - 방문 상태 체크 및 담당자 메모 작성
 class CheckList extends StatefulWidget {
   const CheckList({super.key});
 
@@ -49,7 +49,7 @@ class _CheckListState extends State<CheckList> {
               _StatusCard(
                 title: '건강상태',
                 keyId: '건강상태-1',
-                options: const ['양호', '주의', '위급'], // 더미값 - 추후 API 연동 필요
+                options: const ['양호', '주의', '위급'],
                 selectedIndex: _selectedIndex['건강상태-1'] ?? -1,
                 onChanged: (i) => setState(() => _selectedIndex['건강상태-1'] = i),
               ),
@@ -59,7 +59,7 @@ class _CheckListState extends State<CheckList> {
               _StatusCard(
                 title: '식사기능',
                 keyId: '식사기능',
-                options: const ['양호', '보통', '불량'], // 더미값 - 추후 API 연동 필요
+                options: const ['양호', '보통', '불량'],
                 selectedIndex: _selectedIndex['식사기능'] ?? -1,
                 onChanged: (i) => setState(() => _selectedIndex['식사기능'] = i),
               ),
@@ -69,7 +69,7 @@ class _CheckListState extends State<CheckList> {
               _StatusCard(
                 title: '건강상태',
                 keyId: '건강상태-2',
-                options: const ['양호', '보통', '불량'], // 더미값 - 추후 API 연동 필요
+                options: const ['양호', '보통', '불량'],
                 selectedIndex: _selectedIndex['건강상태-2'] ?? -1,
                 onChanged: (i) => setState(() => _selectedIndex['건강상태-2'] = i),
               ),
@@ -79,7 +79,7 @@ class _CheckListState extends State<CheckList> {
               _StatusCard(
                 title: '건강상태',
                 keyId: '건강상태-3',
-                options: const ['양호', '보통', '불량'], // 더미값 - 추후 API 연동 필요
+                options: const ['양호', '보통', '불량'],
                 selectedIndex: _selectedIndex['건강상태-3'] ?? -1,
                 onChanged: (i) => setState(() => _selectedIndex['건강상태-3'] = i),
               ),
@@ -157,7 +157,7 @@ class _CheckListState extends State<CheckList> {
   }
 }
 
-/// 섹션 헤더 위젯
+// 섹션 헤더 위젯
 class _SectionHeader extends StatelessWidget {
   final String text;
   const _SectionHeader({required this.text});
@@ -176,11 +176,11 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-/// 상태 체크 카드 위젯 - 좌측 타이틀과 우측 3개 옵션
+// 상태 체크 카드 위젯 - 좌측 타이틀과 우측 3개 옵션
 class _StatusCard extends StatelessWidget {
   final String title;
   final String keyId;
-  final List<String> options; // 3개 옵션 가정
+  final List<String> options;
   final int selectedIndex;
   final ValueChanged<int> onChanged;
 
@@ -247,7 +247,7 @@ class _StatusCard extends StatelessWidget {
   }
 }
 
-/// 체크박스와 라벨을 포함한 옵션 위젯
+// 체크박스와 라벨을 포함한 옵션 위젯
 class _CheckOption extends StatelessWidget {
   final String label;
   final bool checked;

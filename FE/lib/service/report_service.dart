@@ -10,12 +10,12 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:safe_hi/util/http_helper.dart';
 
-/// 리포트 관련 API 통신을 담당하는 서비스 클래스
+// 리포트 관련 API 통신을 담당하는 서비스 클래스
 class ReportService {
   // API 서버 기본 URL
   static const String baseUrl = ApiConfig.baseUrl;
 
-  /// 기본 리포트 대상자 목록 조회
+  // 기본 리포트 대상자 목록 조회
   Future<List<ReportTarget>> fetchReportTargets() async {
     final headers = await buildAuthHeaders();
     final response = await http.get(
@@ -31,7 +31,7 @@ class ReportService {
     }
   }
 
-  /// 기본 리포트 정보 업로드
+  // 기본 리포트 정보 업로드
   Future<Map<String, dynamic>> uploadDefaultReport({
     required ReportTarget target,
     required UserModel user,
@@ -44,7 +44,7 @@ class ReportService {
     // 업로드할 리포트 데이터 구성
     final body = {
       "reportid": target.reportId,
-      "reportstatus": 1, // 더미값 - 추후 백엔드 연동 필요
+      "reportstatus": 1,
       "visittime": target.visitTime,
       "targetInfo": {
         "targetid": target.targetId,
@@ -79,7 +79,7 @@ class ReportService {
     return jsonDecode(response.body);
   }
 
-  /// 방문 상세 내용(특이사항) 업로드
+  // 방문 상세 내용(특이사항) 업로드
   Future<void> uploadVisitDetail({
     required int reportId,
     required String detail,
@@ -105,7 +105,7 @@ class ReportService {
     }
   }
 
-  /// 리포트 이미지들 업로드 (멀티파트 방식)
+  // 리포트 이미지들 업로드 (멀티파트 방식)
   Future<void> uploadImages({
     required int reportId,
     required List<File> imageFiles,
@@ -140,7 +140,7 @@ class ReportService {
     }
   }
 
-  /// 상담 내용 STT 텍스트 조회
+  // 상담 내용 STT 텍스트 조회
   Future<String> getConversationText(int reportId) async {
     final url = Uri.parse('$baseUrl/db/getConverstationSTTtxt/$reportId');
     final headers = await buildAuthHeaders();
@@ -154,7 +154,7 @@ class ReportService {
     }
   }
 
-  /// 완성된 리포트 문서 다운로드
+  // 완성된 리포트 문서 다운로드
   Future<File> downloadReport(int reportId) async {
     final url = Uri.parse('$baseUrl/db/getReport/$reportId');
     final headers = await buildAuthHeaders();
@@ -175,7 +175,7 @@ class ReportService {
     }
   }
 
-  /// STT 경로 업데이트
+  // STT 경로 업데이트
   Future<void> updateSttPath({
     required int reportId,
     required String email,
@@ -199,7 +199,7 @@ class ReportService {
     }
   }
 
-  /// STT 경로 조회
+  // STT 경로 조회
   Future<String> getTranscriptPath({
     required int reportId,
     required String email,

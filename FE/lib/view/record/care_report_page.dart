@@ -188,8 +188,8 @@ class _CareReportPageState extends State<CareReportPage> {
                                         horizontal: 18, vertical: 8),
                                     decoration: BoxDecoration(
                                       color: v['type'] == '방문'
-                                          ? const Color(0xFFD32F2F)    // 현장돌봄은 빨간색
-                                          : const Color(0xFFE65100),   // 전화돌봄은 진한 주황색(개나리색)
+                                          ? const Color(0xFFD32F2F)
+                                          : const Color(0xFFE65100),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
@@ -219,7 +219,7 @@ class _CareReportPageState extends State<CareReportPage> {
     );
   }
 
-  /// 필터 토글 버튼 위젯
+  // 필터 토글 버튼 위젯
   Widget _buildToggleButton({
     required String text,
     required int index,

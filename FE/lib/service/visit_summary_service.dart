@@ -5,11 +5,11 @@ import 'package:safe_hi/core/constants.dart';
 import 'package:safe_hi/model/visit_summary_model.dart';
 import 'package:safe_hi/util/http_helper.dart';
 
-/// 방문 요약 정보 관련 API 통신을 담당하는 서비스 클래스
+// 방문 요약 정보 관련 API 통신을 담당하는 서비스 클래스
 class VisitSummaryService {
   static const String baseUrl = ApiConfig.baseUrl;
 
-  /// 방문 요약 정보 조회
+  // 방문 요약 정보 조회
   Future<VisitSummaryResponse> fetchVisitSummary(int reportId) async {
     final headers = await buildAuthHeaders();
 
@@ -53,7 +53,7 @@ class VisitSummaryService {
     // });
   }
 
-  /// 방문 요약 수정 내용 업로드
+  // 방문 요약 수정 내용 업로드
   Future<void> uploadVisitSummaryEdit({
     required int reportId,
     required List<VisitSummary> summaries,
@@ -85,7 +85,7 @@ class VisitSummaryService {
     }
   }
 
-  /// STT 요약 조회
+  // STT 요약 조회
   Future<Map<String, dynamic>> getConversationSummary(int summaryId) async {
     final url = Uri.parse('$baseUrl/db/conversation-summary/$summaryId');
     final headers = await buildAuthHeaders();

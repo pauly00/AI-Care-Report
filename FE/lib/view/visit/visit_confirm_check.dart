@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:safe_hi/view/visit/visit_start_record.dart';
-import 'dart:io';
 
-/// 방문 확인 및 체크 페이지 - 대상자 정보 확인 및 방문 전 체크리스트
+// 방문 확인 및 체크 페이지 - 대상자 정보 확인 및 방문 전 체크리스트
 class VisitCheckConfirmPage extends StatefulWidget {
   final String name;
   final String address;
@@ -30,7 +29,7 @@ class _VisitCheckConfirmPageState extends State<VisitCheckConfirmPage> {
   bool _checkedInternet = false;
   bool _checkedConsent = false;
 
-  /// 전화걸기 기능
+  // 전화걸기 기능
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -48,7 +47,7 @@ class _VisitCheckConfirmPageState extends State<VisitCheckConfirmPage> {
     }
   }
 
-  /// 네이버 지도 길찾기 열기
+  // 네이버 지도 길찾기 열기
   Future<void> _openNaverMapRoute({required String destAddress}) async {
     try {
       final cleanAddress = destAddress.trim();
@@ -125,7 +124,7 @@ class _VisitCheckConfirmPageState extends State<VisitCheckConfirmPage> {
     }
   }
 
-  /// 주소 통합 처리 (address1 + address2 우선, 없으면 address 사용)
+  // 주소 통합 처리 (address1 + address2 우선, 없으면 address 사용)
   String _buildFullAddress() {
     final parts = [widget.address1, widget.address2]
         .where((e) => e != null && e.trim().isNotEmpty)
@@ -141,7 +140,7 @@ class _VisitCheckConfirmPageState extends State<VisitCheckConfirmPage> {
     return result;
   }
 
-  /// 오류 다이얼로그 표시
+  // 오류 다이얼로그 표시
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -288,7 +287,7 @@ class _VisitCheckConfirmPageState extends State<VisitCheckConfirmPage> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                        '6.26 목 오전 10:29     15분 36초', // 더미값 - 추후 API 연동 필요
+                        '6.26 목 오전 10:29     15분 36초',
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
@@ -423,7 +422,7 @@ class _VisitCheckConfirmPageState extends State<VisitCheckConfirmPage> {
                   builder: (context) => const VisitStartRecordPage(),
                 ),
               );
-            } : null, // 체크박스가 모두 체크되지 않으면 비활성화
+            } : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: (_checkedInternet && _checkedConsent)
                   ? const Color(0xFFFB5457)

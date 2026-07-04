@@ -2,7 +2,7 @@
 class MonthlyReportItem {
   final int year;
   final int month;
-  final bool generated; // 생성 완료 여부
+  final bool generated;
 
   const MonthlyReportItem({
     required this.year,

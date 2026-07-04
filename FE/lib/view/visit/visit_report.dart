@@ -6,10 +6,8 @@ import 'package:safe_hi/provider/nav/bottom_nav_provider.dart';
 
 import 'package:safe_hi/main_screen.dart';
 
-import '../manage/report_management.dart';
-import '../record/care_report_page.dart';
 
-/// 돌봄 상담 완료 후 보여지는 페이지
+// 돌봄 상담 완료 후 보여지는 페이지
 class VisitReportPage extends StatelessWidget {
   const VisitReportPage({Key? key}) : super(key: key);
 
@@ -86,13 +84,13 @@ class VisitReportPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              // 돌봄 기록 확인하기 버튼 (기록 탭으로 이동)
+              // 돌봄 기록 버튼
               Expanded(
                 child: SizedBox(
                   height: 56,
                   child: OutlinedButton(
                     onPressed: () {
-                      // 메인 앱 시작 시 기록 탭(인덱스 2)으로 설정
+                      // 기록 탭 이동
                       BottomNavProvider.startupIndex = 2;
 
                       // 메인 화면으로 이동하며 네비게이션 스택 초기화
@@ -126,13 +124,13 @@ class VisitReportPage extends StatelessWidget {
 
               const SizedBox(width: 12),
 
-              // 홈으로 가기 버튼 (홈 탭으로 이동)
+              // 홈 이동 버튼
               Expanded(
                 child: SizedBox(
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      // 홈 탭(인덱스 0)으로 설정
+                      // 홈 탭 이동
                       final navProvider = context.read<BottomNavProvider>();
                       navProvider.setIndex(0);
 

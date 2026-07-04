@@ -57,7 +57,7 @@ class MyPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 48), // 좌우 대칭을 위한 공간
+                  const SizedBox(width: 48),
                 ],
               ),
             ),
@@ -103,7 +103,7 @@ class MyPage extends StatelessWidget {
                                       color: Color(0xFF433A3A),
                                     ),
                                   ),
-                                  Text( // 임의의 주소, 추후 연동 필요
+                                  Text(
                                     '대전 동구 마산동',
                                     style: TextStyle(
                                       fontSize: 15,
@@ -117,7 +117,7 @@ class MyPage extends StatelessWidget {
 
                           // 정보 수정 버튼
                           GestureDetector(
-                            onTap: () { // 추후 navigator로 페이지 추가 필요
+                            onTap: () {
                               print('내 정보 수정 버튼 클릭');
                             },
                             child: const Text(
@@ -247,7 +247,7 @@ class MyPage extends StatelessWidget {
                           children: [
                             // 고객센터
                             GestureDetector(
-                              onTap: () { // 추후 navigator로 페이지 추가 필요
+                              onTap: () {
                                 print('고객센터 버튼 클릭');
                               },
                               child: const Row(
@@ -278,7 +278,7 @@ class MyPage extends StatelessWidget {
 
                             // 공지사항
                             GestureDetector(
-                              onTap: () { // 추후 navigator로 페이지 추가 필요
+                              onTap: () {
                                 print('공지사항 버튼 클릭');
                               },
                               child: const Row(
@@ -309,7 +309,7 @@ class MyPage extends StatelessWidget {
 
                             // 자주 묻는 질문
                             GestureDetector(
-                              onTap: () {// 추후 navigator로 페이지 추가 필요
+                              onTap: () {
                                 print('자주 묻는 질문 버튼 클릭');
                               },
                               child: const Row(
@@ -340,7 +340,7 @@ class MyPage extends StatelessWidget {
 
                             // 약관 및 동의
                             GestureDetector(
-                              onTap: () { // 추후 navigator로 페이지 추가 필요
+                              onTap: () {
                                 print('약관 및 동의 버튼 클릭');
                               },
                               child: const Row(
@@ -393,7 +393,7 @@ class MyPage extends StatelessWidget {
                           children: [
                             // 앱 설정
                             GestureDetector(
-                              onTap: () { // 추후 navigator로 페이지 추가 필요
+                              onTap: () {
                                 print('앱 설정 버튼 클릭');
                               },
                               child: const Row(

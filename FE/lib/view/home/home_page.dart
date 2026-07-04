@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       ..sort((a, b) => _toSortableDateTime(a.visitTime).compareTo(_toSortableDateTime(b.visitTime)));
     final reportVM = context.watch<ReportViewModel>();
     final userVM = context.watch<UserViewModel>();
-    final username = userVM.user?.name ?? 'OOO'; // 사용자 이름 가져오기
+    final username = userVM.user?.name ?? 'OOO';
     final pendingReports = reportVM.targets.length;
     final recommendedWelfareCount = reportVM.targets
         .where((target) => target.reportStatus <= 1)
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 1), // 업무와 방문 예정 사이 공간
+                          const SizedBox(height: 1),
 
                           // 방문 예정 건수 표시
                           Row(
@@ -143,11 +143,10 @@ class _HomePageState extends State<HomePage> {
                               ),
                               // 건수 배지
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2), // 3곳 관련 공백
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFFB5457),
                                   borderRadius: BorderRadius.circular(20),
-                                  // border: Border.all(color: Colors.white, width: 2.0), // 테두리 제거
                                 ),
                                 child: Text(
                                   todayVisitVM.isLoading
@@ -170,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 6), // 방문 예정과 리포트,추천 사이의 공백
+                          const SizedBox(height: 6),
 
                           // 업무 통계 카드들
                           Row(
@@ -179,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    // 메인 앱 시작 시 기록 탭(인덱스 2)으로 설정
+                                    // 기록 탭 이동
                                     BottomNavProvider.startupIndex = 2;
 
                                     // 메인 화면으로 이동하며 네비게이션 스택 초기화
@@ -208,7 +207,6 @@ class _HomePageState extends State<HomePage> {
                                         Expanded(
                                           child: Container(
                                             width: double.infinity,
-                                            // padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.00), // 오른쪽 여백
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.end,
                                               mainAxisAlignment: MainAxisAlignment.center,
@@ -230,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                                                   '${pendingReports}건',
                                                   style: TextStyle(
                                                     color: Colors.grey[600],
-                                                    fontSize: responsive.fontBase, // 기존: responsive.fontSmall
+                                                    fontSize: responsive.fontBase,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
@@ -249,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    // 메인 앱 시작 시 기록 탭(인덱스 2)으로 설정
+                                    // 기록 탭 이동
                                     BottomNavProvider.startupIndex = 2;
 
                                     // 메인 화면으로 이동하며 네비게이션 스택 초기화
@@ -385,25 +383,14 @@ class _HomePageState extends State<HomePage> {
                         // API 오류 시 메시지 표시 (주석처리)
                         // else if (todayVisitVM.errorMessage != null)
                         //   Center(
-                        //     child: Padding(
-                        //       padding: const EdgeInsets.all(20.0),
-                        //       child: Column(
                         //         children: [
                         //           Text(
                         //             'API 연결 실패. 더미 데이터를 표시합니다.',
                         //             textAlign: TextAlign.center,
-                        //             style: TextStyle(color: Colors.orange),
-                        //           ),
-                        //           const SizedBox(height: 10),
                         //           Text(
                         //             '오류: ${todayVisitVM.errorMessage}',
                         //             textAlign: TextAlign.center,
-                        //             style: TextStyle(color: Colors.red, fontSize: 12),
-                        //           ),
                         //         ],
-                        //       ),
-                        //     ),
-                        //   )
                         // 일정이 없을 때
                         else if (sortedTodayVisits.isEmpty)
                             const Center(
@@ -492,8 +479,8 @@ class _HomePageState extends State<HomePage> {
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                                 decoration: BoxDecoration(
                                                   color: visit.visitType == 0
-                                                      ? const Color(0xFFFFF3CD) // 전화돌봄 - 개나리색 배경
-                                                      : const Color(0xFFFFEBEE), // 현장돌봄 - 빨간색 배경
+                                                      ? const Color(0xFFFFF3CD)
+                                                      : const Color(0xFFFFEBEE),
                                                   borderRadius: BorderRadius.circular(12),
                                                 ),
                                                 child: Text(
@@ -501,8 +488,8 @@ class _HomePageState extends State<HomePage> {
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                     color: visit.visitType == 0
-                                                        ? const Color(0xFFE65100) // 전화돌봄 - 진한 주황색 텍스트
-                                                        : const Color(0xFFD32F2F), // 현장돌봄 - 빨간색 텍스트
+                                                        ? const Color(0xFFE65100)
+                                                        : const Color(0xFFD32F2F),
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 ),
@@ -512,8 +499,8 @@ class _HomePageState extends State<HomePage> {
                                           const SizedBox(height: 8),
                                           Text(
                                             visit.visitType == 0
-                                                ? visit.callNum  // 전화돌봄일 때 전화번호 표시
-                                                : visit.address, // 현장돌봄일 때 주소 표시
+                                                ? visit.callNum
+                                                : visit.address,
                                             style: TextStyle(
                                               fontSize: 14,
                                               color: Colors.grey.shade600,

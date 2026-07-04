@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:safe_hi/util/responsive.dart';
 
 class DropdownCard extends StatefulWidget {
-  final String title; // 드롭박스 제목
-  final Widget content; // 드롭박스 내용 (다양한 디자인 가능)
+  final String title;
+  final Widget content;
 
   const DropdownCard({super.key, required this.title, required this.content});
 
@@ -12,7 +12,7 @@ class DropdownCard extends StatefulWidget {
 }
 
 class _DropdownCardState extends State<DropdownCard> {
-  bool isExpanded = false; // 드롭박스 열림/닫힘 상태 관리
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _DropdownCardState extends State<DropdownCard> {
         children: [
           ListTile(
             title: Text(
-              widget.title, // 제목 표시
+              widget.title,
               style: TextStyle(
                 fontSize: responsive.fontBase,
                 color: Color(0xFFB3A5A5),
@@ -47,14 +47,14 @@ class _DropdownCardState extends State<DropdownCard> {
             ),
             onTap: () {
               setState(() {
-                isExpanded = !isExpanded; // 클릭 시 열림/닫힘 상태 전환
+                isExpanded = !isExpanded;
               });
             },
           ),
           if (isExpanded)
             Padding(
               padding: const EdgeInsets.all(14.0),
-              child: widget.content, // 각기 다른 디자인의 content 표시
+              child: widget.content,
             ),
         ],
       ),

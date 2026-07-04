@@ -8,7 +8,7 @@ import 'package:safe_hi/util/login_storage_helper.dart';
 class UserService {
   static const String baseUrl = ApiConfig.baseUrl;
 
-  /// 로그인 요청
+  // 로그인 요청
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       final response = await http.post(
@@ -47,7 +47,7 @@ class UserService {
     }
   }
 
-  /// 토큰으로 사용자 정보 요청 (자동 로그인용)
+  // 토큰으로 사용자 정보 요청 (자동 로그인용)
   Future<Map<String, dynamic>> fetchUserInfo() async {
     final token = await LoginStorageHelper.readToken();
 
@@ -83,7 +83,7 @@ class UserService {
     throw Exception('예상하지 못한 응답 형식');
   }
 
-  /// 이메일 중복 체크
+  // 이메일 중복 체크
   Future<Map<String, dynamic>> emailCheck(String email) async {
     try {
       final response = await http.post(
@@ -98,7 +98,7 @@ class UserService {
     }
   }
 
-  /// 유저 정보 업데이트
+  // 유저 정보 업데이트
   Future<Map<String, dynamic>> updateUser(
     int userId,
     Map<String, dynamic> data,
@@ -117,7 +117,7 @@ class UserService {
     }
   }
 
-  /// 유저 삭제
+  // 유저 삭제
   Future<Map<String, dynamic>> deleteUser(int userId) async {
     try {
       final headers = await buildAuthHeaders();

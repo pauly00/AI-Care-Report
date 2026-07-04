@@ -4,10 +4,10 @@ import 'package:safe_hi/view/mypage/mypage.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final Widget? trailing; // 오른쪽 위젯 추가
+  final Widget? trailing;
 
   const DefaultAppBar({super.key, required this.title,
-  this.trailing}); // 선택 파라미터 추가
+  this.trailing});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
           // 오른쪽 빨간 동그라미 (Flutter 내장) - 클릭 가능하도록 수정
           Padding(
-            padding: const EdgeInsets.only(right: 16.0), // 2번 문제 해결을 위한 일관된 여백
+            padding: const EdgeInsets.only(right: 16.0),
             child: Center(
               child: InkWell(
                 onTap: () {
@@ -62,7 +62,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                     MaterialPageRoute(builder: (_) => const MyPage()),
                   );
                 },
-                borderRadius: BorderRadius.circular(20), // 원형 터치 영역
+                borderRadius: BorderRadius.circular(20),
                 child: Container(
                   width: 40,
                   height: 40,
@@ -72,8 +72,8 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                     shape: BoxShape.circle,
                     // 빨간색 테두리 추가
                     border: Border.all(
-                      color: const Color(0xFFFB5457), // 테두리 색상
-                      width: 2.0,                      // 테두리 두께
+                      color: const Color(0xFFFB5457),
+                      width: 2.0,
                     ),
                   ),
                   // 이미지가 원형 테두리를 벗어나지 않도록 ClipOval 사용
@@ -82,7 +82,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                       // 아이콘이 꽉 차지 않도록 약간의 내부 여백 적용
                       padding: const EdgeInsets.all(3.0),
                       child: Image.asset(
-                        'assets/images/profile.png', // 사람 아이콘 PNG 경로
+                        'assets/images/profile.png',
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -91,7 +91,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
-          SizedBox(width: responsive.itemSpacing), // 오른쪽 여백
+          SizedBox(width: responsive.itemSpacing),
         ],
       ),
     );

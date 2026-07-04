@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_hi/provider/id/report_id.dart';
-import 'package:safe_hi/view/report/report_1.dart';
+import 'package:safe_hi/view/report/report_default_info.dart';
 import 'package:safe_hi/view_model/report_view_model.dart';
 import 'package:safe_hi/model/report_model.dart';
 import 'package:safe_hi/util/responsive.dart';
@@ -96,7 +96,7 @@ class ReportListCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Report1(
+                  builder: (context) => ReportDefaultInfoPage(
                     targetName: target.targetName,
                     address: target.address1,
                   ),

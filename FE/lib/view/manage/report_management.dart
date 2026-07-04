@@ -35,7 +35,7 @@ class _ReportManagementPageState extends State<ReportManagementPage> {
     });
   }
 
-  /// 검색 결과 업데이트
+  // 검색 결과 업데이트
   void _updateSearchResults(List<TargetCardData> results) {
     setState(() {
       _filteredTargets = results;

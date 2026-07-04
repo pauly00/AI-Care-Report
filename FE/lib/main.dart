@@ -18,7 +18,7 @@ import 'package:safe_hi/view_model/today_visit_view_model.dart';
 import 'dart:io';
 
 // 모든 인증서 강제 허용(보안 문제 발생 위험 가능, 서버 인증서 문제 때문)
-class MyHttpOverrides extends HttpOverrides { // 임시 추가(ssl 무시)
+class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
@@ -35,7 +35,7 @@ void main() async {
   await userVM.tryAutoLogin();
 
   // await Firebase.initializeApp(); // firebase 실행
-  HttpOverrides.global = MyHttpOverrides(); // ssl 인증 무시
+  HttpOverrides.global = MyHttpOverrides();
 
   runApp(
     ConnectivityWrapper(
@@ -51,7 +51,7 @@ void main() async {
           ),
           ChangeNotifierProvider(create: (_) => VisitCallViewModel()),
           ChangeNotifierProvider(create: (_) => TodayVisitViewModel()),
-          ChangeNotifierProvider(create: (_) => SignupViewModel()), // 이미 등록되어 있는지 확인
+          ChangeNotifierProvider(create: (_) => SignupViewModel()),
         ],
         child: const MyApp(),
       ),
@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                await _checkInitialNetwork(); // 다시 시도
+                await _checkInitialNetwork();
               },
               child: const Text('다시 시도'),
             ),
@@ -146,7 +146,6 @@ class _MyAppState extends State<MyApp> {
                 //   'assets/images/logoicon.png',
                 //   width: 120,
                 //   height: 120,
-                // ),
                 const SizedBox(height: 20),
                 const CircularProgressIndicator(
                   color: Color(0xFFFB5457),

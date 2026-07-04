@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_hi/main_screen.dart';
-import 'package:safe_hi/view/signup/terms_agreement_page.dart';
 import 'package:safe_hi/view_model/user_view_model.dart';
 import 'package:safe_hi/util/responsive.dart';
 
@@ -25,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   //   Navigator.pushReplacement(
   //     context,
   //     MaterialPageRoute(builder: (_) => const MainScreen()),
-  //   );
   // }
 
   void _login() async {

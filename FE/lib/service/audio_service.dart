@@ -7,7 +7,7 @@ import 'websocket_service.dart';
 
 class AudioWebSocketRecorder {
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-  final WebSocketService ws; // 각 Recorder마다 다른 ws 인스턴스 가능
+  final WebSocketService ws;
 
   bool _isRecording = false;
   StreamSubscription<Uint8List>? _recorderSubscription;
@@ -15,7 +15,7 @@ class AudioWebSocketRecorder {
   // 생성자에서 WebSocketService를 주입
   AudioWebSocketRecorder({required this.ws});
 
-  // 1) 초기화
+  // 초기화
   Future<void> initRecorder() async {
     final status = await Permission.microphone.request();
     debugPrint('🎤 마이크 권한 상태: $status');
@@ -28,7 +28,7 @@ class AudioWebSocketRecorder {
     debugPrint('🎤 마이크 열기 성공');
   }
 
-  // 2) 녹음 시작 + WebSocket 전송 (raw binary)
+  // 녹음 시작 + WebSocket 전송
   Future<void> startRecording() async {
     if (_isRecording) {
       debugPrint('이미 녹음 중입니다.');
@@ -53,7 +53,7 @@ class AudioWebSocketRecorder {
     debugPrint('오디오 녹음 & WebSocket 전송 시작');
   }
 
-  // 3) 녹음 중지
+  // 녹음 중지
   Future<void> stopRecording() async {
     if (!_isRecording) return;
     _isRecording = false;
@@ -69,7 +69,7 @@ class AudioWebSocketRecorder {
     }
   }
 
-  // 4) dispose
+  // dispose
   Future<void> dispose() async {
     await stopRecording();
     await _recorder.closeRecorder();

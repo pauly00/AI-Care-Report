@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Provider 추가
+import 'package:provider/provider.dart';
 import 'package:safe_hi/util/responsive.dart';
-import 'package:safe_hi/view_model/user_view_model.dart'; // UserViewModel 추가
+import 'package:safe_hi/view_model/user_view_model.dart';
 import 'package:safe_hi/widget/appbar/default_back_appbar.dart';
 
 class CareReportDetail extends StatelessWidget {
-  final String name; // name 매개변수 추가
-  final int count; // count 매개변수 추가
+  final String name;
+  final int count;
 
   const CareReportDetail({
     super.key,
-    required this.name, // 필수 매개변수로 설정
-    required this.count, // 필수 매개변수로 설정
+    required this.name,
+    required this.count,
   });
 
   @override
@@ -20,7 +20,7 @@ class CareReportDetail extends StatelessWidget {
     
     // UserViewModel에서 사용자 이름 가져오기
     final userVM = context.watch<UserViewModel>();
-    final username = userVM.user?.name ?? '김안심'; // 기본값을 '김안심'으로 설정
+    final username = userVM.user?.name ?? '김안심';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -46,7 +46,7 @@ class CareReportDetail extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '$username 매니저    오전 11:14 ~ 오전 11:55', // 시간은 더미값, 추후 백엔드 연동 필요
+                      '$username 매니저    오전 11:14 ~ 오전 11:55',
                       style: const TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.w700,
@@ -67,7 +67,7 @@ class CareReportDetail extends StatelessWidget {
                             horizontal: 20, vertical: 10),
                       ),
                       child: const Text(
-                        '상담 완료', // 상태값 - 백엔드 연동 필요
+                        '상담 완료',
                         style: TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.w900,
@@ -81,7 +81,7 @@ class CareReportDetail extends StatelessWidget {
                       rs,
                       title: '신체 상태',
                       content:
-                      '최근 들어 식사량이 줄어 하루 한 끼만 먹는 경우가 잦음. 허리 통증이 지난주보다 심해짐에 따라 이에 대한 조치가 필요해 보임', // 더미값 - 백엔드 연동 필요
+                      '최근 들어 식사량이 줄어 하루 한 끼만 먹는 경우가 잦음. 허리 통증이 지난주보다 심해짐에 따라 이에 대한 조치가 필요해 보임',
                     ),
                     const SizedBox(height: 14),
 
@@ -90,7 +90,7 @@ class CareReportDetail extends StatelessWidget {
                       rs,
                       title: '생활 환경',
                       content:
-                      '외출이 줄어들어 주로 집 안에 머무르고 있으며, 운동이나 산책은 거의 하지 않는 상황임. 집안 정리와 청소 상태가 전보다 미흡함', // 더미값 - 백엔드 연동 필요
+                      '외출이 줄어들어 주로 집 안에 머무르고 있으며, 운동이나 산책은 거의 하지 않는 상황임. 집안 정리와 청소 상태가 전보다 미흡함',
                     ),
                     const SizedBox(height: 14),
 
@@ -99,7 +99,7 @@ class CareReportDetail extends StatelessWidget {
                       rs,
                       title: '정서 상태',
                       content:
-                      '전반적으로 기분은 안정적이지만 대화 중 외로움과 무료함을 자주 표현함', // 더미값 - 백엔드 연동 필요
+                      '전반적으로 기분은 안정적이지만 대화 중 외로움과 무료함을 자주 표현함',
                     ),
                     const SizedBox(height: 20),
 
@@ -112,7 +112,7 @@ class CareReportDetail extends StatelessWidget {
                       rs,
                       title: '',
                       content:
-                      '대화 중 같은 질문을 반복하는 등 기억력에 어려움이 관찰되어 지속적인 확인이 필요함', // 더미값 - 백엔드 연동 필요
+                      '대화 중 같은 질문을 반복하는 등 기억력에 어려움이 관찰되어 지속적인 확인이 필요함',
                     ),
                     SizedBox(height: rs.sectionSpacing * 1.5),
                   ],
@@ -155,7 +155,7 @@ class CareReportDetail extends StatelessWidget {
     );
   }
 
-  /// 상세 카드 위젯
+  // 상세 카드 위젯
   Widget _detailCard(Responsive rs,
       {required String title, required String content}) {
     return Container(
@@ -191,7 +191,7 @@ class CareReportDetail extends StatelessWidget {
     );
   }
 
-  /// 생활상태 평가 (정상/양호/불량)
+  // 생활상태 평가 (정상/양호/불량)
   Widget _statusRow() {
     Widget item(String label, String value, Color color) {
       return Expanded(
@@ -221,7 +221,7 @@ class CareReportDetail extends StatelessWidget {
         border: Border.all(color: Color(0xFFE0E0E0)),
       ),
       child: Row(
-        children: [ // 더미값 - 백엔드 연동 필요
+        children: [
           item('건강상태', '정상', Colors.green),
           item('식사기능', '양호', Colors.green),
           item('인지기능', '불량', Colors.red),

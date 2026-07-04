@@ -4,14 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_hi/model/user_register_model.dart';
 import 'package:safe_hi/util/responsive.dart';
-import 'package:safe_hi/view/signup/terms_agreement_page.dart';
 import 'package:safe_hi/view_model/signup_view_model.dart';
 import 'package:safe_hi/widget/button/bottom_one_btn.dart';
 import 'package:safe_hi/widget/appbar/default_back_appbar.dart';
-import 'package:safe_hi/view/login/login_page.dart';
 import 'package:safe_hi/view/signup/terms_bottom_sheet.dart';
 
-/// 회원가입 폼 화면 - 사용자 정보 입력 및 약관 동의
+// 회원가입 폼 화면 - 사용자 정보 입력 및 약관 동의
 class SignupFormPage extends StatefulWidget {
   const SignupFormPage({super.key});
 
@@ -32,7 +30,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
 
   // 입력 상태 관리
   bool _isEmailChecked = false;
-  String _gender = '남'; // 더미값 - 추후 다국어 지원 필요
+  String _gender = '남';
   bool _isObscurePassword = true;
   bool _isObscureConfirm = true;
 
@@ -47,7 +45,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
     super.dispose();
   }
 
-  /// 폼 유효성 검사 - 모든 필수 항목이 올바르게 입력되었는지 확인
+  // 폼 유효성 검사 - 모든 필수 항목이 올바르게 입력되었는지 확인
   bool get _isFormValid {
     return _isEmailChecked &&
         _validateEmail(_emailController.text) &&
@@ -58,7 +56,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
         _birthController.text.isNotEmpty;
   }
 
-  /// 비밀번호 유효성 검사 - 특수문자, 문자, 숫자 포함 8-15자
+  // 비밀번호 유효성 검사 - 특수문자, 문자, 숫자 포함 8-15자
   String? _validatePassword(String value) {
     String pattern =
         r'^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,15}$';
@@ -170,7 +168,6 @@ class _SignupFormPageState extends State<SignupFormPage> {
             //   onButtonTap: () async {
             //     _showTermsBottomSheet(context);
             //   },
-            // ),
             SizedBox(height: responsive.itemSpacing),
             
             // 실제 가입하기 버튼
@@ -179,7 +176,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
                 isEnabled: _isFormValid,
                 onButtonTap: () async {
                   if (_isFormValid) {
-                    final genderValue = _gender == '남' ? 1 : 0; // 성별 코드 변환
+                    final genderValue = _gender == '남' ? 1 : 0;
 
                     final user = UserRegisterModel(
                       name: _nameController.text.trim(),
@@ -192,7 +189,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
 
                     try {
                       final viewModel = context.read<SignupViewModel>();
-                      final result = await viewModel.signup(user); // 회원가입 API 호출 - 추후 백엔드 연동 필요
+                      final result = await viewModel.signup(user);
                       final success = result['success'] as bool;
                       final msg = result['msg'] as String;
 
@@ -216,32 +213,32 @@ class _SignupFormPageState extends State<SignupFormPage> {
     );
   }
 
-  /// 이메일 유효성 검사
+  // 이메일 유효성 검사
   bool _validateEmail(String email) {
     return RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
   }
 
-  /// 전화번호 유효성 검사 (010-xxxx-xxxx 형식)
+  // 전화번호 유효성 검사 (010-xxxx-xxxx 형식)
   bool _validatePhoneNumber(String phone) {
     return RegExp(r'^010-?([0-9]{4})-?([0-9]{4})$').hasMatch(phone);
   }
 
-  /// 이메일 입력 필드 위젯
+  // 이메일 입력 필드 위젯
   Widget _buildEmailField() {
     return _buildTextField(
       label: '이메일',
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       suffixIcon: TextButton(
-        onPressed: () => setState(() => _isEmailChecked = true), // 중복확인 - 추후 API 연동 필요
+        onPressed: () => setState(() => _isEmailChecked = true),
         child: const Text('중복확인', style: TextStyle(color: Colors.grey)),
       ),
     );
   }
 
-  /// 비밀번호 입력 필드 위젯
+  // 비밀번호 입력 필드 위젯
   Widget _buildPasswordField(String label, TextEditingController controller,
       bool isObscure, VoidCallback toggle) {
     return _buildTextField(
@@ -261,7 +258,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
     );
   }
 
-  /// 공통 텍스트 필드 위젯
+  // 공통 텍스트 필드 위젯
   Widget _buildTextField({
     required String label,
     required TextEditingController controller,
@@ -302,7 +299,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
     );
   }
 
-  /// 생년월일 선택 필드 위젯
+  // 생년월일 선택 필드 위젯
   Widget _buildBirthField() {
     final responsive = Responsive(context);
     return Column(
@@ -349,12 +346,12 @@ class _SignupFormPageState extends State<SignupFormPage> {
     );
   }
 
-  /// 날짜 형식 변환 (YYYY-MM-DD)
+  // 날짜 형식 변환 (YYYY-MM-DD)
   String _formatDate(DateTime date) {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
-  /// 성별 선택 위젯
+  // 성별 선택 위젯
   Widget _buildGenderSelection() {
     final responsive = Responsive(context);
     return Column(
@@ -373,7 +370,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
     );
   }
 
-  /// 라디오 버튼 위젯
+  // 라디오 버튼 위젯
   Widget _buildRadioButton(String value) {
     final responsive = Responsive(context);
     return Row(
@@ -394,7 +391,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
     );
   }
 
-  /// 라벨 텍스트 위젯 (필수 표시 포함)
+  // 라벨 텍스트 위젯 (필수 표시 포함)
   Widget _buildLabelText(String label) {
     final responsive = Responsive(context);
     return Text.rich(
@@ -408,7 +405,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
     );
   }
 
-  /// 도움말 텍스트 위젯 (성공/에러 메시지)
+  // 도움말 텍스트 위젯 (성공/에러 메시지)
   Widget _helperText(String message, {bool isError = false}) {
     final responsive = Responsive(context);
     return Padding(
@@ -433,7 +430,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
     );
   }
 
-  /// 약관 동의 바텀시트 표시
+  // 약관 동의 바텀시트 표시
   void _showTermsBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -444,7 +441,7 @@ class _SignupFormPageState extends State<SignupFormPage> {
   }
 }
 
-/// 에러 다이얼로그 표시
+// 에러 다이얼로그 표시
 void showErrorDialog(BuildContext context, String message) {
   showDialog(
     context: context,

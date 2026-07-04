@@ -10,13 +10,12 @@ import 'package:safe_hi/model/visit_detail_model.dart';
 import 'package:safe_hi/model/visit_model.dart';
 import 'package:safe_hi/util/http_helper.dart';
 import 'package:path/path.dart' as path;
-import 'package:mime/mime.dart';
 
-/// 방문 일정 및 대상자 정보 관련 API 통신을 담당하는 서비스 클래스
+// 방문 일정 및 대상자 정보 관련 API 통신을 담당하는 서비스 클래스
 class VisitService {
   static const String baseUrl = ApiConfig.baseUrl;
 
-  /// 오늘 방문 예정 대상자 목록 조회
+  // 오늘 방문 예정 대상자 목록 조회
   static Future<List<Visit>> fetchTodayVisits() async {
     final headers = await buildAuthHeaders();
 
@@ -33,7 +32,7 @@ class VisitService {
     }
   }
 
-  /// 특정 날짜의 방문 대상자 목록 조회
+  // 특정 날짜의 방문 대상자 목록 조회
   static Future<List<Visit>> fetchVisitsByDate(String date) async {
     final headers = await buildAuthHeaders();
 
@@ -50,7 +49,7 @@ class VisitService {
     }
   }
 
-  /// 방문 대상자 기본 정보 조회
+  // 방문 대상자 기본 정보 조회
   static Future<Visit> fetchVisitDetail(int targetId) async {
     final headers = await buildAuthHeaders();
 
@@ -67,7 +66,7 @@ class VisitService {
     }
   }
 
-  /// 방문자 상세 정보 조회
+  // 방문자 상세 정보 조회
   Future<VisitDetail> getTargetDetail(int reportId) async {
     final headers = await buildAuthHeaders();
 
@@ -84,7 +83,7 @@ class VisitService {
     }
   }
 
-  /// 통화 녹음 파일 업로드
+  // 통화 녹음 파일 업로드
   static Future<void> uploadCallRecord({
     required int reportId,
     required File audioFile,
@@ -119,7 +118,7 @@ class VisitService {
         'audiofile',
         audioFile.path,
         filename:
-            '${path.basename(audioFile.path)}${ext.isEmpty ? '.mp3' : ''}', // 확장자 보장
+            '${path.basename(audioFile.path)}${ext.isEmpty ? '.mp3' : ''}',
         contentType: MediaType('audio', mimeSubtype),
       ),
     );
@@ -133,7 +132,7 @@ class VisitService {
     }
   }
 
-  /// 방문 보고서 생성
+  // 방문 보고서 생성
   static Future<Map<String, dynamic>> addVisitReport({
     required String visitTime,
     required String email,
@@ -158,7 +157,7 @@ class VisitService {
     }
   }
 
-  /// 모든 방문 보고서 조회 (JWT 필요)
+  // 모든 방문 보고서 조회 (JWT 필요)
   static Future<List<ReportTarget>> getAllVisitReports() async {
     final headers = await buildAuthHeaders();
     final response = await http.get(
@@ -173,7 +172,7 @@ class VisitService {
     }
   }
 
-  /// 방문 완료 보고서 조회 (JWT 필요)
+  // 방문 완료 보고서 조회 (JWT 필요)
   static Future<List<ReportTarget>> getResultReportList() async {
     final headers = await buildAuthHeaders();
     final response = await http.get(
@@ -188,7 +187,7 @@ class VisitService {
     }
   }
 
-  /// 상담 완료 처리 (reportstatus = 2)
+  // 상담 완료 처리
   static Future<void> visitReportDone(int reportId) async {
     final headers = await buildAuthHeaders();
     final response = await http.get(
@@ -200,7 +199,7 @@ class VisitService {
     }
   }
 
-  /// 보고서에 사용자(email) 설정
+  // 보고서에 사용자(email) 설정
   static Future<void> setUserToReport({
     required int reportId,
     required String email,
@@ -216,7 +215,7 @@ class VisitService {
     }
   }
 
-  /// 카테고리 요약본 DB에 업데이트
+  // 카테고리 요약본 DB에 업데이트
   static Future<void> updateVisitCategory({
     required int reportId,
     required String email,
@@ -237,7 +236,7 @@ class VisitService {
     }
   }
 
-  /// 대상자 등록
+  // 대상자 등록
   static Future<Map<String, dynamic>> addTarget(
     Map<String, dynamic> targetData,
   ) async {
@@ -254,7 +253,7 @@ class VisitService {
     }
   }
 
-  /// 모든 대상자 조회
+  // 모든 대상자 조회
   static Future<List<Target>> getAllTargets() async {
     final headers = await buildAuthHeaders();
     final response = await http.get(

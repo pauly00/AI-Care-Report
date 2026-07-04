@@ -8,9 +8,9 @@ import 'package:safe_hi/util/http_helper.dart';
 
 const String baseUrl = ApiConfig.baseUrl;
 
-/// 복지 정책 관련 API 통신을 담당하는 서비스 클래스
+// 복지 정책 관련 API 통신을 담당하는 서비스 클래스
 class WelfareService {
-  /// 복지 정책 데이터 조회
+  // 복지 정책 데이터 조회
   Future<Map<String, dynamic>> fetchWelfarePoliciesData(int targetId) async {
     final headers = await buildAuthHeaders();
 
@@ -47,7 +47,7 @@ class WelfareService {
     // };
   }
 
-  /// 정책 확인 상태 업로드
+  // 정책 확인 상태 업로드
   Future<void> uploadPolicyCheckStatus({
     required int reportId,
     required List<Map<String, dynamic>> policyList,
@@ -83,7 +83,7 @@ class WelfareService {
     }
   }
 
-  /// 모든 복지정책 조회
+  // 모든 복지정책 조회
   Future<List<WelfarePolicy>> getAllWelfarePolicies() async {
     final headers = await buildAuthHeaders();
     final response = await http.get(
@@ -98,7 +98,7 @@ class WelfareService {
     }
   }
 
-  /// 특정 복지정책 조회
+  // 특정 복지정책 조회
   Future<WelfarePolicy> getWelfarePolicy(int policyId) async {
     final headers = await buildAuthHeaders();
     final response = await http.get(
@@ -112,7 +112,7 @@ class WelfareService {
     }
   }
 
-  /// 유저의 복지정책 업데이트
+  // 유저의 복지정책 업데이트
   Future<void> updateUserWelfarePolicies(
     int userId,
     List<dynamic> policy,
@@ -128,7 +128,7 @@ class WelfareService {
     }
   }
 
-  /// 유저의 처리완료된 복지 데이터 조회
+  // 유저의 처리완료된 복지 데이터 조회
   Future<Map<String, dynamic>> getWelfareDatas(int userId) async {
     final headers = await buildAuthHeaders();
     final response = await http.get(
@@ -142,7 +142,7 @@ class WelfareService {
     }
   }
 
-  /// 복지 데이터 업데이트
+  // 복지 데이터 업데이트
   Future<void> updateWelfareDatas(int userId, List<dynamic> policy) async {
     final headers = await buildAuthHeaders();
     final response = await http.put(
@@ -155,7 +155,7 @@ class WelfareService {
     }
   }
 
-  /// 정책 정보 조회
+  // 정책 정보 조회
   Future<PolicyModel> getPolicy(int policyId) async {
     final headers = await buildAuthHeaders();
     final response = await http.get(
@@ -169,7 +169,7 @@ class WelfareService {
     }
   }
 
-  /// 정책 생성
+  // 정책 생성
   Future<PolicyModel> createPolicy(Map<String, dynamic> data) async {
     final headers = await buildAuthHeaders();
     final response = await http.post(
@@ -184,7 +184,7 @@ class WelfareService {
     }
   }
 
-  /// 정책 업데이트
+  // 정책 업데이트
   Future<PolicyModel> updatePolicy(
     int policyId,
     Map<String, dynamic> data,
@@ -202,7 +202,7 @@ class WelfareService {
     }
   }
 
-  /// 정책 삭제
+  // 정책 삭제
   Future<void> deletePolicy(int policyId) async {
     final headers = await buildAuthHeaders();
     final response = await http.delete(

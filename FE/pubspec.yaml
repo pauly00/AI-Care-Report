@@ -84,7 +84,7 @@ dev_dependencies:
 # 아이콘 추가
 flutter_icons:
   android: true
-  ios: true
+  ios: false
   image_path: "assets/images/logo.png"
 
 # For information on the generic Dart part of this file, see the
@@ -142,7 +142,7 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 dependency_overrides:
-  intl: ^0.20.2
+  intl: 0.20.2
   
 flutter_native_splash:
   color: "#F8898E"

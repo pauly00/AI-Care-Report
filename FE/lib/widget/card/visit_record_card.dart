@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:safe_hi/util/responsive.dart';
 
-/// 방문 기록을 표시하는 카드 위젯
-/// 사용자가 탭하면 상세 페이지로 이동할 수 있음
+// 방문 기록을 표시하는 카드 위젯
+// 사용자가 탭하면 상세 페이지로 이동할 수 있음
 class VisitRecordCard extends StatelessWidget {
-  final int id; // 방문 기록 고유 ID (백엔드 연동 필요)
-  final String name; // 방문지 이름
-  final String address; // 방문지 주소
-  final bool isTablet; // 태블릿 여부에 따른 UI 조정
-  final VoidCallback? onTap; // 카드 클릭 시 실행될 콜백 함수
+  final int id;
+  final String name;
+  final String address;
+  final bool isTablet;
+  final VoidCallback? onTap;
 
   const VisitRecordCard({
     super.key,

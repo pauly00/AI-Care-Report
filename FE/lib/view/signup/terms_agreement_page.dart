@@ -4,7 +4,6 @@ import 'package:safe_hi/view_model/signup_view_model.dart';
 import 'package:safe_hi/widget/appbar/default_back_appbar.dart';
 import 'package:safe_hi/widget/button/bottom_one_btn.dart';
 import 'package:safe_hi/util/responsive.dart';
-import 'package:safe_hi/view/signup/signup_form_page.dart';
 
 import '../login/login_page.dart';
 

@@ -6,14 +6,14 @@ import 'package:safe_hi/util/responsive.dart';
 import 'package:safe_hi/view/visit/visit_detail_page.dart';
 import 'package:safe_hi/view_model/visit/visit_list_view_model.dart';
 
-/// 방문 목록 카드 위젯
-/// 방문 기록의 기본 정보(시간, 이름, 주소)를 표시하고 상세 페이지로 이동
+// 방문 목록 카드 위젯
+// 방문 기록의 기본 정보(시간, 이름, 주소)를 표시하고 상세 페이지로 이동
 class VisitCard extends StatelessWidget {
   final int id;
-  final String time; // 방문 시간 - API 연동 필요
-  final String name; // 방문자/장소 이름 - API 연동 필요
-  final String address; // 기본 주소 - API 연동 필요
-  final String addressDetails; // 상세 주소 - API 연동 필요
+  final String time;
+  final String name;
+  final String address;
+  final String addressDetails;
 
   const VisitCard({
     super.key,
@@ -74,7 +74,7 @@ class VisitCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  formatTime(time), // 시간 포맷팅 유틸 사용
+                  formatTime(time),
                   style: TextStyle(
                     fontSize: responsive.fontBase - 1,
                     fontWeight: FontWeight.bold,

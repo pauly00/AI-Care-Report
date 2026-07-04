@@ -67,7 +67,7 @@ class _ConnectivityWrapperState extends State<ConnectivityWrapper> {
               final stillOffline = result == ConnectivityResult.none;
 
               if (stillOffline && mounted && !_isDialogVisible) {
-                _showNoConnectionDialog(); // 🔁 다시 팝업
+                _showNoConnectionDialog();
               }
             },
             child: const Text('확인'),

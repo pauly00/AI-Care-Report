@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:safe_hi/provider/nav/bottom_nav_provider.dart'; // 바 변경 시 해당 파일 임포트 변경
+import 'package:safe_hi/provider/nav/bottom_nav_provider.dart';
 import 'package:safe_hi/util/responsive.dart';
 
 class BottomMenubar extends StatelessWidget {

@@ -15,7 +15,7 @@ class WebSocketService {
   Stream? _broadcastStream;
 
   bool get isConnected => _channel != null;
-  Stream? get stream => _broadcastStream; // ✅ 안전하게 반환
+  Stream? get stream => _broadcastStream;
 
   Future<void> connect(String url) async {
     try {

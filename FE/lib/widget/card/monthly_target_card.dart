@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:safe_hi/model/monthly_report_item.dart';
 
-/// 월별 리포트 생성 상태를 표시하는 카드 위젯
-/// - 생성 완료: 클릭 시 리포트 보기 가능
-/// - 생성 중: 로딩 스피너 표시
-/// - 미생성: 생성하기 버튼 표시
+// 월별 리포트 생성 상태를 표시하는 카드 위젯
+// - 생성 완료: 클릭 시 리포트 보기 가능
+// - 생성 중: 로딩 스피너 표시
+// - 미생성: 생성하기 버튼 표시
 class MonthlyTargetCard extends StatelessWidget {
   const MonthlyTargetCard({
     super.key,
@@ -17,11 +17,11 @@ class MonthlyTargetCard extends StatelessWidget {
   });
 
   final MonthlyReportItem item;
-  final String userName; // TODO: 백엔드 연동 - 실제 사용자명으로 대체 필요
+  final String userName;
   final bool isHighlighted;
   final bool isLoading;
-  final VoidCallback onGenerate; // 리포트 생성 콜백
-  final VoidCallback onViewReport; // 리포트 보기 콜백
+  final VoidCallback onGenerate;
+  final VoidCallback onViewReport;
 
   // 색상 상수
   static const Color _primaryRed = Color(0xFFFB5457);
@@ -92,7 +92,7 @@ class MonthlyTargetCard extends StatelessWidget {
             // 리포트 제목
             Expanded(
               child: Text(
-                '$userName님의 ${item.month}월 통합 리포트', // TODO: API 연동 필요
+                '$userName님의 ${item.month}월 통합 리포트',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,

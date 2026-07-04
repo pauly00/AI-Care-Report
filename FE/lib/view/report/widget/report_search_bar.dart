@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:safe_hi/util/responsive.dart';
-import 'package:safe_hi/view/report/target_card.dart';
 import 'package:safe_hi/view/report/widget/target_card_data.dart';
 
 class ReportSearchBar extends StatefulWidget {
@@ -12,8 +11,8 @@ class ReportSearchBar extends StatefulWidget {
   });
 
   final Responsive r;
-  final Function(List<TargetCardData>) onSearch; // 검색 결과 콜백
-  final List<TargetCardData> allTargets; // 전체 대상자 리스트
+  final Function(List<TargetCardData>) onSearch;
+  final List<TargetCardData> allTargets;
 
   @override
   State<ReportSearchBar> createState() => _ReportSearchBarState();
@@ -59,7 +58,7 @@ class _ReportSearchBarState extends State<ReportSearchBar> {
       ),
       child: TextField(
         controller: _searchController,
-        onChanged: _onSearchChanged, // 검색어 변경 시 실시간 검색
+        onChanged: _onSearchChanged,
         decoration: InputDecoration(
           prefixIcon: const Icon(Icons.search, color: Color(0xFF9D9D9D)),
           hintText: '대상자 이름을 검색해주세요',
@@ -68,7 +67,7 @@ class _ReportSearchBarState extends State<ReportSearchBar> {
             fontSize: widget.r.fontSmall,
           ),
           filled: true,
-          fillColor: Colors.transparent, // Container 색상 사용
+          fillColor: Colors.transparent,
           contentPadding: EdgeInsets.symmetric(
             vertical: widget.r.itemSpacing,
             horizontal: 16,
@@ -84,7 +83,7 @@ class _ReportSearchBarState extends State<ReportSearchBar> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(
-              color: Color(0xFFFB5457), // 포커스 시 메인 컬러
+              color: Color(0xFFFB5457),
               width: 1.5,
             ),
           ),
@@ -94,7 +93,7 @@ class _ReportSearchBarState extends State<ReportSearchBar> {
                   icon: const Icon(Icons.clear, color: Color(0xFF9D9D9D)),
                   onPressed: () {
                     _searchController.clear();
-                    _onSearchChanged(''); // 전체 목록으로 초기화
+                    _onSearchChanged('');
                   },
                 )
               : null,

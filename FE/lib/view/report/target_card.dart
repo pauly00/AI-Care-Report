@@ -3,9 +3,8 @@ import 'package:safe_hi/util/responsive.dart';
 import 'package:safe_hi/view/report/monthly_target_page.dart';
 import 'package:safe_hi/view/report/widget/target_card_data.dart';
 
-import '../../widget/card/monthly_target.dart';
 
-/// 대상자 카드 위젯 - 리포트 대상자 정보 표시
+// 대상자 카드 위젯 - 리포트 대상자 정보 표시
 class TargetCard extends StatelessWidget {
   const TargetCard({super.key, required this.r, required this.data});
   final Responsive r;
@@ -20,8 +19,8 @@ class TargetCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => MonthlyTargetPage(
-              name: data.name, // data.name 전달
-              address: data.address, // data.address 전달
+              name: data.name,
+              address: data.address,
             ),
           ),
         );

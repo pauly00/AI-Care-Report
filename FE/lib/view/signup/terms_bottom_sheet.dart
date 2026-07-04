@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../util/responsive.dart';
 import '../login/login_page.dart';
 
-/// 약관 동의 바텀시트
+// 약관 동의 바텀시트
 class TermsBottomSheet extends StatefulWidget {
   const TermsBottomSheet({Key? key}) : super(key: key);
 
@@ -25,7 +25,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
   bool get _allIndividualAgree =>
       _agreeTerms && _agreePrivacy && _agreeThirdParty;
 
-  /// 전체 동의 체크박스 상태 업데이트
+  // 전체 동의 체크박스 상태 업데이트
   void _updateOverallCheckbox() {
     setState(() {
       _allAgreeValue = _allIndividualAgree;
@@ -165,7 +165,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
                           _termsExpanded = !_termsExpanded;
                         });
                       },
-                      _getTermsContent(), // 더미값 - 추후 실제 약관 내용으로 교체 필요
+                      _getTermsContent(),
                       responsive,
                     ),
                     const SizedBox(height: 16),
@@ -184,7 +184,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
                           _privacyExpanded = !_privacyExpanded;
                         });
                       },
-                      _getPrivacyContent(), // 더미값 - 추후 실제 개인정보 정책으로 교체 필요
+                      _getPrivacyContent(),
                       responsive,
                     ),
                     const SizedBox(height: 16),
@@ -203,7 +203,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
                           _thirdPartyExpanded = !_thirdPartyExpanded;
                         });
                       },
-                      _getThirdPartyContent(), // 더미값 - 추후 실제 제3자 제공 정책으로 교체 필요
+                      _getThirdPartyContent(),
                       responsive,
                     ),
                     
@@ -214,7 +214,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: _allIndividualAgree ? () {
-                          Navigator.of(context).pop(); // 바텀시트 닫기
+                          Navigator.of(context).pop();
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (_) => const LoginPage()),
@@ -250,7 +250,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
     );
   }
 
-  /// 확장 가능한 약관 항목 위젯
+  // 확장 가능한 약관 항목 위젯
   Widget _buildExpandableTermItem(
     String title,
     bool isChecked,
@@ -348,7 +348,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
     );
   }
 
-  /// 이용약관 내용 - 더미값
+  // 이용약관 내용 - 더미값
   String _getTermsContent() {
     return '''제1조 (목적)
 이 약관은 안심하이(이하 "회사"라 합니다)가 운영하는 안심하이 서비스(이하 "서비스"라 합니다)의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
@@ -358,7 +358,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
 2. "이용자"란 이 약관에 따라 회사가 제공하는 서비스를 받는 회원 및 비회원을 말합니다.''';
   }
 
-  /// 개인정보 수집 내용 - 더미값
+  // 개인정보 수집 내용 - 더미값
   String _getPrivacyContent() {
     return '''1. 개인정보의 수집 및 이용 목적
 회사는 다음의 목적을 위하여 개인정보를 처리합니다.
@@ -370,7 +370,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
 - 필수항목: 이름, 생년월일, 성별, 이메일, 전화번호''';
   }
 
-  /// 제3자 제공 내용 - 더미값
+  // 제3자 제공 내용 - 더미값
   String _getThirdPartyContent() {
     return '''1. 개인정보를 제공받는 자
 - 배송업체, 결제대행업체, 본인확인업체

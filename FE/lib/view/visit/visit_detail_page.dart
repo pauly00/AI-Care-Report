@@ -177,7 +177,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                 Text(
                     visit.phone.isNotEmpty
                         ? visit.phone
-                        : '정보 없음', // ✅ fallback 처리
+                        : '정보 없음',
                     style: TextStyle(
                       fontSize: responsive.fontBase,
                     )),

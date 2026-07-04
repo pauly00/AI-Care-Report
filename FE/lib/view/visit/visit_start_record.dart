@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safe_hi/util/responsive.dart';
 import 'package:safe_hi/view/visit/visit_checklist.dart';
-import 'package:safe_hi/widget/appbar/default_back_appbar.dart'; // ✅ import 추가
+import 'package:safe_hi/widget/appbar/default_back_appbar.dart';
 
 
 // TODO: 음성 녹음을 위한 패키지 추가 필요
@@ -76,11 +76,8 @@ class _VisitStartRecordPageState extends State<VisitStartRecordPage>
   // void _startListening() async {
   //   await _speech.listen(
   //     onResult: _onSpeechResult,
-  //     listenFor: Duration(minutes: 30), // 최대 30분 녹음
-  //     pauseFor: Duration(seconds: 3), // 3초 침묵 시 일시정지
   //     partialResults: true, // 실시간 결과 표시
   //     localeId: 'ko_KR', // 한국어 설정
-  //   );
   //   setState(() {
   //     _isListening = true;
   //   });
@@ -97,7 +94,6 @@ class _VisitStartRecordPageState extends State<VisitStartRecordPage>
   //         text: _currentText,
   //         isFromUser: isFromUser,
   //         timestamp: DateTime.now(),
-  //       ));
   //       _currentText = '';
   //     }
   //   });
@@ -352,27 +348,13 @@ class _VisitStartRecordPageState extends State<VisitStartRecordPage>
   // Widget _buildMessageBubble(ChatMessage message) {
   //   return Align(
   //     alignment: message.isFromUser ? Alignment.centerRight : Alignment.centerLeft,
-  //     child: Container(
-  //       padding: const EdgeInsets.all(12),
   //       margin: EdgeInsets.only(
   //         bottom: 12,
   //         left: message.isFromUser ? 50 : 0,
   //         right: message.isFromUser ? 0 : 50,
-  //       ),
   //       decoration: BoxDecoration(
-  //         color: message.isFromUser ? Colors.white : const Color(0xFFFB5457),
-  //         borderRadius: BorderRadius.circular(12),
-  //         border: message.isFromUser ? Border.all(color: Colors.grey.shade200) : null,
-  //       ),
-  //       child: Text(
   //         message.text,
-  //         style: TextStyle(
-  //           color: message.isFromUser ? Colors.black87 : Colors.white,
   //           fontWeight: message.isFromUser ? FontWeight.w500 : FontWeight.w600,
-  //         ),
-  //       ),
-  //     ),
-  //   );
   // }
 
   // 돌봄 종료 확인 다이얼로그 표시
@@ -398,7 +380,7 @@ class _VisitStartRecordPageState extends State<VisitStartRecordPage>
             // 취소 버튼 - 녹음을 계속 진행
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기만 하고 녹음 유지
+                Navigator.of(context).pop();
                 // TODO: 음성 인식 재시작 (일시정지 상태였다면)
                 // _startListening();
               },
@@ -412,7 +394,7 @@ class _VisitStartRecordPageState extends State<VisitStartRecordPage>
             // 종료 확인 버튼 - 리포트 페이지로 이동
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기
+                Navigator.of(context).pop();
                 // 돌봄 완료 후 리포트 페이지로 이동
                 Navigator.pushReplacement(
                   context,
