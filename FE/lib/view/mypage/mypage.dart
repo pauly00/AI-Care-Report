@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:safe_hi/main_screen.dart';
+import 'package:safe_hi/provider/nav/bottom_nav_provider.dart';
 import 'package:safe_hi/view_model/user_view_model.dart';
 import 'package:safe_hi/view_model/report_view_model.dart';
 import 'package:safe_hi/view/login/login_page.dart';
@@ -37,7 +39,7 @@ class MyPage extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      _goHome(context);
                     },
                     icon: const Icon(
                       Icons.arrow_back,
@@ -471,7 +473,7 @@ class MyPage extends StatelessWidget {
               height: 56,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                  _goHome(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFB5457),
@@ -492,6 +494,15 @@ class MyPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _goHome(BuildContext context) {
+    context.read<BottomNavProvider>().setIndex(0);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const MainScreen()),
+      (route) => false,
     );
   }
 }

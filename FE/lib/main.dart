@@ -17,6 +17,7 @@ import 'package:safe_hi/view_model/visit/visit_call_view_model.dart';
 import 'package:safe_hi/view_model/today_visit_view_model.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'dart:io';
+import 'dart:math' as math;
 
 // 모든 인증서 강제 허용(보안 문제 발생 위험 가능, 서버 인증서 문제 때문)
 class MyHttpOverrides extends HttpOverrides {
@@ -192,26 +193,33 @@ class _MyAppState extends State<MyApp> {
           return child ?? const SizedBox.shrink();
         }
 
-        return ColoredBox(
-          color: const Color(0xFFF3F4F6),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 430),
-              child: DecoratedBox(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x1F000000),
-                      blurRadius: 24,
-                      offset: Offset(0, 8),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final width = math.min(constraints.maxWidth, 430.0);
+
+            return ColoredBox(
+              color: const Color(0xFFF3F4F6),
+              child: Center(
+                child: SizedBox(
+                  width: width,
+                  height: constraints.maxHeight,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x1F000000),
+                          blurRadius: 24,
+                          offset: Offset(0, 8),
+                        ),
+                      ],
                     ),
-                  ],
+                    child: ClipRect(child: child),
+                  ),
                 ),
-                child: child,
               ),
-            ),
-          ),
+            );
+          },
         );
       },
 

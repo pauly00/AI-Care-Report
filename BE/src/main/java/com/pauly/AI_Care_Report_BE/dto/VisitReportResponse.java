@@ -15,6 +15,8 @@ public class VisitReportResponse {
     private Long reportid;
     private Integer reportstatus;
     private String visittime;
+    private Integer visitType;
+    private String visittype;
 
     @JsonProperty("targetInfo")
     private Map<String, Object> targetInfo;
@@ -37,11 +39,30 @@ public class VisitReportResponse {
                 .reportid(report.getId())
                 .reportstatus(report.getReportstatus())
                 .visittime(report.getVisittime())
+                .visitType(toVisitTypeCode(report.getVisittype()))
+                .visittype(report.getVisittype())
                 .targetInfo(target)
                 .build();
     }
 
     private static Object nvl(Object val) {
         return val != null ? val : "";
+    }
+
+    private static Integer toVisitTypeCode(String visitType) {
+        if (visitType == null || visitType.isBlank()) {
+            return 1;
+        }
+        if ("전화돌봄".equals(visitType)) {
+            return 0;
+        }
+        if ("현장돌봄".equals(visitType) || "방문돌봄".equals(visitType)) {
+            return 1;
+        }
+        try {
+            return Integer.parseInt(visitType);
+        } catch (NumberFormatException e) {
+            return 1;
+        }
     }
 }

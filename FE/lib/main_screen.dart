@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:safe_hi/provider/nav/bottom_nav_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:safe_hi/provider/nav/bottom_nav_provider.dart';
 import 'package:safe_hi/repository/visit_repository.dart';
 import 'package:safe_hi/service/visit_service.dart';
 import 'package:safe_hi/view_model/signup_view_model.dart';
@@ -15,7 +15,6 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => BottomNavProvider()),
         ChangeNotifierProvider(
             create: (_) => VisitViewModel(
                 repository: VisitRepository(service: VisitService()))),

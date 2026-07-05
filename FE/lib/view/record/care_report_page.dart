@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:safe_hi/model/report_model.dart';
 import 'package:safe_hi/util/responsive.dart';
 import 'package:safe_hi/view/report/care_report_detail.dart';
+import 'package:safe_hi/view_model/report_view_model.dart';
 import 'package:safe_hi/widget/appbar/default_appbar.dart';
 
 class CareReportPage extends StatefulWidget {
@@ -17,17 +20,10 @@ class _CareReportPageState extends State<CareReportPage> {
   @override
   Widget build(BuildContext context) {
     final rs = Responsive(context);
+    final reportVM = context.watch<ReportViewModel>();
 
-    // 더미 데이터 - 추후 API 연동 필요
-    final visits = [
-      {'date': '2025.08.13', 'name': '오하이', 'count': 3, 'type': '방문'},
-      {'date': '2025.08.13', 'name': '남영탁', 'count': 2, 'type': '전화'},
-      {'date': '2025.08.13', 'name': '박정자', 'count': 1, 'type': '방문'},
-      {'date': '2025.08.13', 'name': '오하이', 'count': 2, 'type': '전화'},
-      {'date': '2025.08.13', 'name': '오하이', 'count': 1, 'type': '전화'},
-      {'date': '2025.08.13', 'name': '강병수', 'count': 1, 'type': '방문'},
-      {'date': '2025.08.12', 'name': '홍길동', 'count': 1, 'type': '방문'},
-    ];
+    // DB 리포트 목록
+    final visits = _filteredReports(reportVM.targets);
 
     return SafeArea(
       child: Scaffold(
@@ -133,81 +129,86 @@ class _CareReportPageState extends State<CareReportPage> {
 
                     // 돌봄 기록 리스트
                     Expanded(
-                      child: ListView.separated(
-                        itemCount: visits.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 12),
-                        itemBuilder: (context, index) {
-                          final v = visits[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CareReportDetail(
-                                    name: v['name'] as String,
-                                    count: v['count'] as int,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: const Color(0xFFE0E0E0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          v['date'] as String,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w600,
+                      child: reportVM.isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : visits.isEmpty
+                              ? const Center(child: Text('표시할 돌봄 기록이 없습니다.'))
+                              : ListView.separated(
+                                  itemCount: visits.length,
+                                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                                  itemBuilder: (context, index) {
+                                    final report = visits[index];
+                                    final type = _visitTypeLabel(report);
+                                    return GestureDetector(
+                                      onTap: () {
+                                        context.read<ReportViewModel>().setSelectedTarget(report);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => CareReportDetail(
+                                              name: report.targetName,
+                                              count: index + 1,
+                                            ),
                                           ),
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(16),
+                                          border: Border.all(color: const Color(0xFFE0E0E0)),
                                         ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          '${v['name']} ${v['count']}회차 돌봄일지',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w900,
-                                            color: Colors.black87,
-                                          ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    _displayDate(report.visitTime),
+                                                    style: const TextStyle(
+                                                      color: Colors.grey,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    '${report.targetName} 돌봄일지',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w900,
+                                                      color: Colors.black87,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 18, vertical: 8),
+                                              decoration: BoxDecoration(
+                                                color: type == '방문'
+                                                    ? const Color(0xFFD32F2F)
+                                                    : const Color(0xFFE65100),
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                              child: Text(
+                                                type,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w900,
+                                                ),
+                                              ),
+                                            ),
+                                            const Icon(Icons.chevron_right,
+                                                color: Colors.black54),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  // 돌봄 유형 태그
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 18, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      color: v['type'] == '방문'
-                                          ? const Color(0xFFD32F2F)
-                                          : const Color(0xFFE65100),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      v['type'] as String,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w900,
                                       ),
-                                    ),
-                                  ),
-                                  const Icon(Icons.chevron_right,
-                                      color: Colors.black54),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                                    );
+                                  },
+                                ),
                     ),
                   ],
                 ),
@@ -217,6 +218,29 @@ class _CareReportPageState extends State<CareReportPage> {
         ),
       ),
     );
+  }
+
+  List<ReportTarget> _filteredReports(List<ReportTarget> reports) {
+    final filtered = reports.where((report) {
+      if (_selectedButton == 1) return report.visitType == 1;
+      if (_selectedButton == 2) return report.visitType == 0;
+      return true;
+    }).toList();
+
+    filtered.sort((a, b) => b.visitTime.compareTo(a.visitTime));
+    return filtered;
+  }
+
+  String _visitTypeLabel(ReportTarget report) {
+    if (report.visitType == 0) return '전화';
+    return '방문';
+  }
+
+  String _displayDate(String visitTime) {
+    if (visitTime.length >= 10) {
+      return visitTime.substring(0, 10).replaceAll('-', '.');
+    }
+    return visitTime.isEmpty ? '일정 미정' : visitTime;
   }
 
   // 필터 토글 버튼 위젯

@@ -34,15 +34,23 @@ class TodayVisit {
   }
 
   factory TodayVisit.fromJson(Map<String, dynamic> json) {
+    final rawVisitTime = _readString(json, ['visitTime', 'visittime']);
     return TodayVisit(
       reportid: json['reportid'] is int
           ? json['reportid'] as int
           : int.tryParse('${json['reportid']}') ?? 0,
-      visitTime: _readString(json, ['visitTime', 'visittime']),
+      visitTime: _displayVisitTime(rawVisitTime),
       visitType: _parseVisitType(json['visitType'] ?? json['visittype']),
       address: _readString(json, ['address', 'address1']),
       name: _readString(json, ['name', 'targetname']),
       callNum: _readString(json, ['callNum', 'targetcallnum', 'callnum']),
     );
+  }
+
+  static String _displayVisitTime(String value) {
+    if (value.length >= 16) {
+      return value.substring(11, 16);
+    }
+    return value;
   }
 }

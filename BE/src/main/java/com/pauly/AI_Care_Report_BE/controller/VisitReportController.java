@@ -51,7 +51,7 @@ public class VisitReportController {
     public ResponseEntity<List<VisitReportResponse>> getDefaultReportList(
             @AuthenticationPrincipal UserDetails userDetails) {
         User user = getUser(userDetails);
-        return ResponseEntity.ok(visitReportService.getAllVisitReports(user));
+        return ResponseEntity.ok(visitReportService.getDefaultReportList(user));
     }
 
     // 오늘 방문 목록 조회 API

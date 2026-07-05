@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,6 +71,7 @@ public class DevDataSeeder implements ApplicationRunner {
         User seedUser = ensureSeedUser();
         List<Target> targets = ensureTargets(seedUser);
         List<VisitReport> reports = ensureVisitReports(seedUser, targets);
+        reports = ensureDailyDemoReports(seedUser, targets, reports);
         List<WelfarePolicy> policies = ensurePolicies();
         ensureSummariesAndPolicyChecks(reports, policies);
 
@@ -185,6 +187,59 @@ public class DevDataSeeder implements ApplicationRunner {
         List<VisitReport> saved = visitReportRepository.saveAll(reports);
         log.info("[SEED] visit reports created for user={} count={}", seedUserEmail, saved.size());
         return saved;
+    }
+
+    private List<VisitReport> ensureDailyDemoReports(User user, List<Target> targets, List<VisitReport> reports) {
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        String todayPrefix = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        Random random = new Random(today.toEpochDay());
+        int desiredCount = random.nextInt(3) + 1;
+
+        List<VisitReport> todayPendingReports = visitReportRepository
+                .findByUserAndVisittimeStartingWith(user, todayPrefix).stream()
+                .filter(report -> report.getReportstatus() == null || report.getReportstatus() < 2)
+                .sorted((a, b) -> Long.compare(
+                        a.getId() != null ? a.getId() : Long.MAX_VALUE,
+                        b.getId() != null ? b.getId() : Long.MAX_VALUE))
+                .toList();
+
+        if (todayPendingReports.size() > desiredCount) {
+            List<VisitReport> extraReports = todayPendingReports.subList(desiredCount, todayPendingReports.size());
+            for (int i = 0; i < extraReports.size(); i++) {
+                VisitReport report = extraReports.get(i);
+                LocalDate nextDay = today.plusDays(i + 1L);
+                LocalTime nextTime = LocalTime.of(10 + (i % 6), i % 2 == 0 ? 0 : 30);
+                report.setVisittime(LocalDateTime.of(nextDay, nextTime).format(VISIT_TIME_FORMATTER));
+                report.setReportstatus(0);
+            }
+            visitReportRepository.saveAll(extraReports);
+            log.info("[SEED] moved extra today reports count={}", extraReports.size());
+        }
+
+        int createCount = Math.max(0, desiredCount - Math.min(todayPendingReports.size(), desiredCount));
+        if (createCount == 0) {
+            return visitReportRepository.findByUser(user);
+        }
+
+        List<VisitReport> dailyReports = new ArrayList<>();
+        for (int i = 0; i < createCount; i++) {
+            Target target = targets.get(random.nextInt(targets.size()));
+            LocalTime time = LocalTime.of(9 + random.nextInt(8), random.nextBoolean() ? 0 : 30);
+            String visitType = random.nextBoolean() ? "전화돌봄" : "현장돌봄";
+
+            VisitReport report = VisitReport.builder()
+                    .user(user)
+                    .target(target)
+                    .visittime(LocalDateTime.of(today, time).format(VISIT_TIME_FORMATTER))
+                    .visittype(visitType)
+                    .reportstatus(random.nextBoolean() ? 0 : 1)
+                    .build();
+            dailyReports.add(report);
+        }
+
+        visitReportRepository.saveAll(dailyReports);
+        log.info("[SEED] daily demo reports created date={} count={}", todayPrefix, dailyReports.size());
+        return visitReportRepository.findByUser(user);
     }
 
     private List<WelfarePolicy> ensurePolicies() {

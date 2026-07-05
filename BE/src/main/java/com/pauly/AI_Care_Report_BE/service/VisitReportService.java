@@ -57,11 +57,22 @@ public class VisitReportService {
                 .collect(Collectors.toList());
     }
 
+    public List<VisitReportResponse> getDefaultReportList(User user) {
+        // 미작성 보고서 목록 조회
+        return visitReportRepository.findByUser(user).stream()
+                .filter(report -> report.getReportstatus() == null || report.getReportstatus() < 2)
+                .map(VisitReportResponse::from)
+                .collect(Collectors.toList());
+    }
+
     public List<Map<String, Object>> getTodayList(User user) {
         // 오늘 방문 목록 조회
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         List<VisitReport> reports = visitReportRepository
-                .findByUserAndVisittimeStartingWith(user, today);
+                .findByUserAndVisittimeStartingWith(user, today).stream()
+                .filter(report -> report.getReportstatus() == null || report.getReportstatus() < 2)
+                .sorted(Comparator.comparing(VisitReport::getVisittime, Comparator.nullsLast(String::compareTo)))
+                .collect(Collectors.toList());
 
         return reports.stream().map(report -> {
             Map<String, Object> item = new HashMap<>();
