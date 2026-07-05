@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_hi/main_screen.dart';
 import 'package:safe_hi/provider/id/report_id.dart';
@@ -186,6 +187,33 @@ class _MyAppState extends State<MyApp> {
           titleMedium: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
+      builder: (context, child) {
+        if (!kIsWeb || child == null) {
+          return child ?? const SizedBox.shrink();
+        }
+
+        return ColoredBox(
+          color: const Color(0xFFF3F4F6),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 430),
+              child: DecoratedBox(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0x1F000000),
+                      blurRadius: 24,
+                      offset: Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: child,
+              ),
+            ),
+          ),
+        );
+      },
 
       home: _hasInternet
           ? (isLoggedIn ? const MainScreen() : const LoginPage())
