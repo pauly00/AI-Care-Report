@@ -30,6 +30,12 @@ public class SecurityConfig {
             "/v3/api-docs/**"
     };
 
+    private static final String[] AUTH_PATHS = {
+            "/db/login",
+            "/db/register",
+            "/db/email_check"
+    };
+
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
@@ -41,6 +47,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SWAGGER_PATHS).permitAll()
+                        .requestMatchers(AUTH_PATHS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
