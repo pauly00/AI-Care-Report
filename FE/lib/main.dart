@@ -214,7 +214,12 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ],
                     ),
-                    child: ClipRect(child: child),
+                    child: MediaQuery(
+                      data: MediaQuery.of(context).copyWith(
+                        size: Size(width, constraints.maxHeight),
+                      ),
+                      child: ClipRect(child: child),
+                    ),
                   ),
                 ),
               ),

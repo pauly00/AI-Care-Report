@@ -37,13 +37,16 @@ class VisitService {
     final headers = await buildAuthHeaders();
 
     final response = await http.get(
-      Uri.parse('$baseUrl/visits?date=$date'),
+      Uri.parse('$baseUrl/db/getAllVisitReports'),
       headers: headers,
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((e) => Visit.fromJson(e)).toList();
+      return data
+          .map((e) => Visit.fromJson(e))
+          .where((visit) => visit.time.startsWith(date))
+          .toList();
     } else {
       throw Exception('Failed to load visits for $date');
     }

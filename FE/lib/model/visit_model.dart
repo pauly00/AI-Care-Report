@@ -36,17 +36,29 @@ class Visit {
     }
 
     return Visit(
-      reportId: json['reportid'] is int ? json['reportid'] : 0,
-      reportStatus: json['reportstatus'] is int ? json['reportstatus'] : 0,
+      reportId: _readInt(json['reportid']),
+      reportStatus: _readInt(json['reportstatus']),
       time: json['visittime'] ?? '',
       visitType: parsedVisitType,
-      targetId: target['targetid'] is int ? target['targetid'] : 0,
-      name: target['targetname'] ?? '',
-      address: target['address1'] ?? '',
-      addressDetails: target['address2'] ?? '',
-      phone: target['targetcallnum'] ?? target['callnum'] ?? '',
-      age: target['age'] is int ? target['age'] : 0,
-      gender: target['gender'] is int ? target['gender'] : 0,
+      targetId: _readInt(target['targetid']),
+      name: target['targetname'] ?? json['name'] ?? json['targetname'] ?? '',
+      address: target['address1'] ?? json['address'] ?? json['address1'] ?? '',
+      addressDetails: target['address2'] ?? json['address2'] ?? '',
+      phone: target['targetcallnum'] ??
+          target['callnum'] ??
+          json['callNum'] ??
+          json['targetcallnum'] ??
+          json['callnum'] ??
+          '',
+      age: _readInt(target['age']),
+      gender: _readInt(target['gender']),
     );
+  }
+
+  static int _readInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 }
