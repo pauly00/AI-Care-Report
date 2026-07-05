@@ -33,8 +33,15 @@ class _MainScreenContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final navProvider = context.watch<BottomNavProvider>();
     return Scaffold(
-      body: navProvider.pages[navProvider.currentIndex],
-      bottomNavigationBar: const BottomMenubar(),
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          Expanded(
+            child: navProvider.pages[navProvider.currentIndex],
+          ),
+          const BottomMenubar(),
+        ],
+      ),
     );
   }
 }

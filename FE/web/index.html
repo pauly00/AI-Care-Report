@@ -33,6 +33,23 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+
+    if ('caches' in window) {
+      caches.keys().then(function(cacheNames) {
+        return Promise.all(cacheNames.map(function(cacheName) {
+          return caches.delete(cacheName);
+        }));
+      });
+    }
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
