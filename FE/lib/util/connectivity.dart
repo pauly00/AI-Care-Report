@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 
 class ConnectivityWrapper extends StatefulWidget {
   final Widget child;
@@ -19,28 +20,27 @@ class _ConnectivityWrapperState extends State<ConnectivityWrapper> {
   @override
   void initState() {
     super.initState();
-    final Connectivity _connectivity = Connectivity();
+    final connectivity = Connectivity();
 
-    // ✅ 실행 직후 상태 강제 확인
     checkInitialConnection();
 
     _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen((results) {
-      final isOffline =
-          results.isEmpty || results.contains(ConnectivityResult.none);
+        connectivity.onConnectivityChanged.listen((results) {
+      final isOffline = _isOffline(results);
 
       if (isOffline && !_isDialogVisible) {
         _showNoConnectionDialog();
       } else if (!isOffline && _isDialogVisible) {
+        if (!mounted) return;
         Navigator.of(context, rootNavigator: true).pop();
         _isDialogVisible = false;
       }
     });
   }
 
-  void checkInitialConnection() async {
-    final result = await Connectivity().checkConnectivity();
-    final isOffline = result == ConnectivityResult.none;
+  Future<void> checkInitialConnection() async {
+    final results = await Connectivity().checkConnectivity();
+    final isOffline = _isOffline(results);
 
     if (isOffline && !_isDialogVisible && mounted) {
       _showNoConnectionDialog();
@@ -61,10 +61,9 @@ class _ConnectivityWrapperState extends State<ConnectivityWrapper> {
               Navigator.of(context, rootNavigator: true).pop();
               _isDialogVisible = false;
 
-              // ✅ 확인 후 연결이 여전히 안 되어 있다면 다시 팝업 띄우기
               await Future.delayed(const Duration(milliseconds: 300));
-              final result = await Connectivity().checkConnectivity();
-              final stillOffline = result == ConnectivityResult.none;
+              final results = await Connectivity().checkConnectivity();
+              final stillOffline = _isOffline(results);
 
               if (stillOffline && mounted && !_isDialogVisible) {
                 _showNoConnectionDialog();
@@ -87,9 +86,13 @@ class _ConnectivityWrapperState extends State<ConnectivityWrapper> {
   Widget build(BuildContext context) {
     return widget.child;
   }
+
+  bool _isOffline(List<ConnectivityResult> results) {
+    return results.isEmpty || results.contains(ConnectivityResult.none);
+  }
 }
 
 Future<bool> isInternetAvailable() async {
-  final result = await Connectivity().checkConnectivity();
-  return result != ConnectivityResult.none;
+  final results = await Connectivity().checkConnectivity();
+  return results.isNotEmpty && !results.contains(ConnectivityResult.none);
 }
